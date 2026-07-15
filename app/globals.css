@@ -1,26 +1,100 @@
 @import "tailwindcss";
 
+/* ————— Crafted Luxe — strict brand palette ————— */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --cream: #f1efe3; /* primary background            */
+  --paper: #e5e4dc; /* drawing-sheet beige           */
+  --ink: #2c1405; /* all text — dark brown         */
+  --umber: #3b1c0a; /* secondary brown               */
+  --royal: #3a0f62; /* deep purple accent            */
+  --lilac: #ece4fa; /* light lavender accent surface */
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-cream: var(--cream);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-umber: var(--umber);
+  --color-royal: var(--royal);
+  --color-lilac: var(--lilac);
+
+  --font-script: var(--font-parisienne);
+  --font-serif: var(--font-cormorant);
+
+  --ease-luxe: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: initial; /* Lenis owns scrolling */
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 1.125rem;
+  line-height: 1.65;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--royal);
+  color: var(--cream);
+}
+
+/* Elegant thin scrollbar in brand tones */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--paper);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--umber);
+  border-radius: 8px;
+  border: 2px solid var(--paper);
+}
+
+/* ————— Drawing-sheet paper finish ————— */
+.paper-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.55;
+  mix-blend-mode: multiply;
+}
+
+/* Deckled / hand-torn sheet edge for mats & frames */
+.sheet-edge {
+  box-shadow:
+    0 1px 2px rgba(44, 20, 5, 0.08),
+    0 8px 24px -8px rgba(44, 20, 5, 0.18),
+    inset 0 0 0 1px rgba(59, 28, 10, 0.12);
+}
+
+/* Fine sketched rule (pencil line) */
+.pencil-rule {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(59, 28, 10, 0.45) 18%,
+    rgba(59, 28, 10, 0.45) 82%,
+    transparent
+  );
+}
+
+/* Reveal helpers — GSAP animates these; hidden only when JS + motion allowed */
+@media (prefers-reduced-motion: no-preference) {
+  .js .gsap-reveal {
+    opacity: 0;
+  }
+}
+
+/* Focus visibility — keyboard nav */
+:focus-visible {
+  outline: 2px solid var(--royal);
+  outline-offset: 3px;
+  border-radius: 2px;
 }
