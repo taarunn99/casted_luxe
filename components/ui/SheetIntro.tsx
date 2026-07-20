@@ -54,6 +54,7 @@ export default function SheetIntro() {
         setDone(true);
       },
     });
+    tl.timeScale(1.5);
 
     // The line is "written" left → right; a nib dot leads the stroke
     tl.fromTo(
@@ -107,14 +108,41 @@ export default function SheetIntro() {
       aria-hidden="true"
       className="fixed inset-x-0 top-0 z-[80] h-[103svh] bg-paper will-change-transform shadow-[0_36px_80px_-12px_rgba(44,20,5,0.4)]"
     >
-      {/* sheet grain — same fractal noise recipe as the site's PaperTexture */}
+      {/* soft sheet lighting — lighter heart, gently darker edges */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(120% 90% at 50% 38%, rgba(241,239,227,0.55) 0%, rgba(229,228,220,0) 55%, rgba(59,28,10,0.07) 100%)",
+        }}
+      />
+
+      {/* drawing-sheet texture — coarse pulp mottling + visible fine grain */}
       <svg
-        className="absolute inset-0 h-full w-full opacity-70 mix-blend-multiply"
+        className="absolute inset-0 h-full w-full mix-blend-multiply"
         xmlns="http://www.w3.org/2000/svg"
         width="100%"
         height="100%"
       >
-        <filter id="sheet-noise" x="0" y="0" width="100%" height="100%">
+        <filter id="sheet-fibres" x="0" y="0" width="100%" height="100%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.012 0.02"
+            numOctaves="2"
+            seed="7"
+            stitchTiles="stitch"
+            result="noise"
+          />
+          <feColorMatrix
+            in="noise"
+            type="matrix"
+            values="0 0 0 0 0.78
+                    0 0 0 0 0.75
+                    0 0 0 0 0.69
+                    0 0 0 0.45 0"
+          />
+        </filter>
+        <filter id="sheet-grain" x="0" y="0" width="100%" height="100%">
           <feTurbulence
             type="fractalNoise"
             baseFrequency="0.9"
@@ -125,13 +153,14 @@ export default function SheetIntro() {
           <feColorMatrix
             in="noise"
             type="matrix"
-            values="0 0 0 0 0.878
-                    0 0 0 0 0.870
-                    0 0 0 0 0.832
-                    0 0 0 0.7 0"
+            values="0 0 0 0 0.72
+                    0 0 0 0 0.69
+                    0 0 0 0 0.62
+                    0 0 0 0.5 0"
           />
         </filter>
-        <rect width="100%" height="100%" filter="url(#sheet-noise)" />
+        <rect width="100%" height="100%" filter="url(#sheet-fibres)" />
+        <rect width="100%" height="100%" filter="url(#sheet-grain)" opacity="0.55" />
       </svg>
 
       {/* faint margin line — a real drawing sheet detail */}
