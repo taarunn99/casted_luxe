@@ -37,7 +37,7 @@ export default function Contact() {
       className="relative bg-lilac/50 py-28 sm:py-36"
     >
       <div className="mx-auto max-w-5xl px-6">
-        <SectionHeading eyebrow="Commissions" title="DM for Customised Works" />
+        <SectionHeading eyebrow="Commissions" title="Craft Your Vision" />
 
         <p className="gsap-reveal mx-auto mt-8 max-w-2xl text-center font-serif text-xl italic text-umber">
           Tell us the story you want turned into art — Ashrat replies to every

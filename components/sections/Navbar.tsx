@@ -3,31 +3,36 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
 const NAV_LINKS = [
-  { label: "Home", href: "#top" },
-  { label: "Gallery", href: "#gallery" },
-  { label: "About", href: "#about" },
+  { label: "Home", href: "/" },
+  { label: "Gallery", href: "/gallery" },
+  { label: "About", href: "/about" },
 ];
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Seamless over the hero — the bar only gains its cream backdrop once
-  // the gallery (first section after the pinned hero) reaches the top.
+  // Seamless over the home hero — the bar only gains its cream backdrop once
+  // the section after the pinned hero reaches the top. On inner pages it
+  // solidifies after the slightest scroll.
   useEffect(() => {
     const onScroll = () => {
-      const gallery = document.getElementById("gallery");
+      const afterHero = document.getElementById("after-hero");
       setScrolled(
-        gallery ? gallery.getBoundingClientRect().top <= 96 : window.scrollY > window.innerHeight,
+        afterHero
+          ? afterHero.getBoundingClientRect().top <= 96
+          : window.scrollY > 24,
       );
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [pathname]);
 
   return (
     <header
@@ -43,7 +48,7 @@ export default function Navbar() {
       >
         {/* Logo — left */}
         <Link
-          href="#top"
+          href="/"
           aria-label="Casted Luxe — home"
           className="flex items-center gap-2 shrink-0"
         >
@@ -62,22 +67,28 @@ export default function Navbar() {
 
         {/* Links — center (desktop) */}
         <ul className="hidden md:flex items-center gap-10 absolute left-1/2 -translate-x-1/2">
-          {NAV_LINKS.map((link) => (
-            <li key={link.href}>
-              <Link
-                href={link.href}
-                className="font-serif text-lg font-medium text-ink tracking-wide transition-colors duration-200 hover:text-royal relative after:absolute after:left-0 after:-bottom-1 after:h-px after:w-0 after:bg-royal after:transition-all after:duration-300 hover:after:w-full"
-              >
-                {link.label}
-              </Link>
-            </li>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const active = pathname === link.href;
+            return (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  aria-current={active ? "page" : undefined}
+                  className={`font-serif text-lg font-medium tracking-wide transition-colors duration-200 hover:text-royal relative after:absolute after:left-0 after:-bottom-1 after:h-px after:bg-royal after:transition-all after:duration-300 hover:after:w-full ${
+                    active ? "text-royal after:w-full" : "text-ink after:w-0"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
 
         {/* CTA — right (desktop) */}
         <div className="hidden md:block">
           <Link
-            href="#contact"
+            href="/contact"
             className="inline-flex items-center min-h-11 rounded-full bg-umber px-6 py-2 font-serif text-base font-semibold tracking-wide text-cream cursor-pointer transition-colors duration-200 hover:bg-ink"
           >
             Craft Your Vision
@@ -134,7 +145,7 @@ export default function Navbar() {
               ))}
               <li className="pt-3 pb-2">
                 <Link
-                  href="#contact"
+                  href="/contact"
                   onClick={() => setMenuOpen(false)}
                   className="inline-flex items-center justify-center w-full min-h-11 rounded-full bg-umber px-6 py-2.5 font-serif text-lg font-semibold text-cream cursor-pointer transition-colors duration-200 hover:bg-ink"
                 >

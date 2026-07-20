@@ -1,23 +1,13 @@
-import Navbar from "@/components/sections/Navbar";
 import LuxeHero from "@/components/sections/LuxeHero";
-import About from "@/components/sections/About";
-import Gallery from "@/components/sections/Gallery";
-import VideoSection from "@/components/sections/VideoSection";
-import Contact from "@/components/sections/Contact";
-import Footer from "@/components/sections/Footer";
+import CollectionPreview from "@/components/sections/CollectionPreview";
+import ArtistTeaser from "@/components/sections/ArtistTeaser";
 
 export default function Home() {
   return (
-    <>
-      <Navbar />
-      <main>
-        <LuxeHero />
-        <Gallery />
-        <About />
-        <VideoSection />
-        <Contact />
-      </main>
-      <Footer />
-    </>
+    <main>
+      <LuxeHero />
+      <CollectionPreview />
+      <ArtistTeaser />
+    </main>
   );
 }

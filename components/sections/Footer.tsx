@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-umber/15 bg-cream py-12">
       <div className="mx-auto flex max-w-7xl flex-col items-center gap-6 px-6 text-center">
-        <Link href="#top" aria-label="Back to top" className="flex items-center gap-2">
+        <Link href="/" aria-label="Casted Luxe — home" className="flex items-center gap-2">
           <Image
             src="/logo.svg"
             alt="Casted Luxe logo"
@@ -21,9 +21,10 @@ export default function Footer() {
         <nav aria-label="Footer">
           <ul className="flex items-center gap-8">
             {[
-              { label: "Gallery", href: "#gallery" },
-              { label: "About", href: "#about" },
-              { label: "Contact", href: "#contact" },
+              { label: "Home", href: "/" },
+              { label: "Gallery", href: "/gallery" },
+              { label: "About", href: "/about" },
+              { label: "Contact", href: "/contact" },
             ].map((link) => (
               <li key={link.href}>
                 <Link

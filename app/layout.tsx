@@ -4,6 +4,8 @@ import "./globals.css";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import PaperTexture from "@/components/ui/PaperTexture";
 import SheetIntro from "@/components/ui/SheetIntro";
+import Navbar from "@/components/sections/Navbar";
+import Footer from "@/components/sections/Footer";
 
 const parisienne = Parisienne({
   variable: "--font-parisienne",
@@ -117,7 +119,11 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <SmoothScroll>{children}</SmoothScroll>
+        <SmoothScroll>
+          <Navbar />
+          {children}
+          <Footer />
+        </SmoothScroll>
         <PaperTexture />
         <SheetIntro />
       </body>
