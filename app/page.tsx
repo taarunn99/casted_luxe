@@ -1,5 +1,5 @@
 import Navbar from "@/components/sections/Navbar";
-import Hero from "@/components/sections/Hero";
+import LuxeHero from "@/components/sections/LuxeHero";
 import About from "@/components/sections/About";
 import Gallery from "@/components/sections/Gallery";
 import VideoSection from "@/components/sections/VideoSection";
@@ -11,7 +11,7 @@ export default function Home() {
     <>
       <Navbar />
       <main>
-        <Hero />
+        <LuxeHero />
         <Gallery />
         <About />
         <VideoSection />
