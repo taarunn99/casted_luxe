@@ -31,6 +31,7 @@ export default function LuxeHero() {
   const ruleRef = useRef<HTMLDivElement>(null);
   const subRef = useRef<HTMLParagraphElement>(null);
   const veilRef = useRef<HTMLDivElement>(null);
+  const hintRef = useRef<HTMLDivElement>(null);
   const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
@@ -105,6 +106,9 @@ export default function LuxeHero() {
 
       // Stage 4 — cream veil melts the film into the gallery beneath
       tl.to(veilRef.current, { opacity: 1, duration: 0.18 }, 0.82);
+
+      // The scroll cue dies the instant the visitor starts scrolling
+      tl.to(hintRef.current, { opacity: 0, duration: 0.03, ease: "none" }, 0.004);
     }, section);
 
     // Silky video scrub: ease currentTime toward the scroll target each tick
@@ -180,6 +184,15 @@ export default function LuxeHero() {
           Handcrafted by Ashrat&ensp;·&ensp;Every Piece a Signature
         </p>
       </div>
+
+      {!reducedMotion && (
+        <div ref={hintRef} className={styles.scrollHint} aria-hidden="true">
+          <div className={styles.scrollHintInner}>
+            <span>Scroll to reveal</span>
+            <i />
+          </div>
+        </div>
+      )}
 
       <div ref={veilRef} className={styles.veil} aria-hidden="true" />
     </section>

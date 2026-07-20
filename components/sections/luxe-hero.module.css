@@ -134,6 +134,62 @@
   color: var(--umber);
 }
 
+/* ---------- scroll cue ----------
+   Outer div: scroll-driven fade (GSAP kills it on the first nudge).
+   Inner div: its own delayed entrance, so the two opacities never fight. */
+.scrollHint {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.scrollHintInner {
+  text-align: center;
+  color: var(--umber);
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+  font-style: italic;
+  font-size: 0.78rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  /* appears only after the paper sheet has lifted */
+  animation: hintIn 0.9s ease 2.6s both;
+}
+
+@keyframes hintIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.scrollHintInner i {
+  display: block;
+  width: 1px;
+  height: 42px;
+  margin: 12px auto 0;
+  background: var(--umber);
+  animation: hintPulse 2.4s var(--ease-luxe) infinite;
+}
+
+@keyframes hintPulse {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+    transform-origin: top;
+  }
+  50% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+}
+
 /* ---------- exit veil ---------- */
 .veil {
   position: absolute;
