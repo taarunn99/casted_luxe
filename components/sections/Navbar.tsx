@@ -6,17 +6,24 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
 const NAV_LINKS = [
+  { label: "Home", href: "#top" },
   { label: "Gallery", href: "#gallery" },
   { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // Seamless over the hero — the bar only gains its cream backdrop once
+  // the gallery (first section after the pinned hero) reaches the top.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => {
+      const gallery = document.getElementById("gallery");
+      setScrolled(
+        gallery ? gallery.getBoundingClientRect().top <= 96 : window.scrollY > window.innerHeight,
+      );
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -32,7 +39,7 @@ export default function Navbar() {
     >
       <nav
         aria-label="Main navigation"
-        className="mx-auto flex max-w-7xl items-center justify-between px-5 sm:px-8 py-3"
+        className="flex w-full items-center justify-between pl-3 pr-4 sm:pl-4 sm:pr-6 py-3"
       >
         {/* Logo — left */}
         <Link
@@ -71,9 +78,9 @@ export default function Navbar() {
         <div className="hidden md:block">
           <Link
             href="#contact"
-            className="inline-flex items-center min-h-11 rounded-full bg-royal px-6 py-2 font-serif text-base font-semibold tracking-wide text-lilac cursor-pointer transition-colors duration-200 hover:bg-umber"
+            className="inline-flex items-center min-h-11 rounded-full bg-umber px-6 py-2 font-serif text-base font-semibold tracking-wide text-cream cursor-pointer transition-colors duration-200 hover:bg-ink"
           >
-            DM for Customised Works
+            Craft Your Vision
           </Link>
         </div>
 
@@ -129,9 +136,9 @@ export default function Navbar() {
                 <Link
                   href="#contact"
                   onClick={() => setMenuOpen(false)}
-                  className="inline-flex items-center justify-center w-full min-h-11 rounded-full bg-royal px-6 py-2.5 font-serif text-lg font-semibold text-lilac cursor-pointer transition-colors duration-200 hover:bg-umber"
+                  className="inline-flex items-center justify-center w-full min-h-11 rounded-full bg-umber px-6 py-2.5 font-serif text-lg font-semibold text-cream cursor-pointer transition-colors duration-200 hover:bg-ink"
                 >
-                  DM for Customised Works
+                  Craft Your Vision
                 </Link>
               </li>
             </ul>

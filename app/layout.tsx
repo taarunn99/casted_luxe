@@ -3,6 +3,7 @@ import { Parisienne, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import PaperTexture from "@/components/ui/PaperTexture";
+import SheetIntro from "@/components/ui/SheetIntro";
 
 const parisienne = Parisienne({
   variable: "--font-parisienne",
@@ -118,6 +119,7 @@ export default function RootLayout({
         />
         <SmoothScroll>{children}</SmoothScroll>
         <PaperTexture />
+        <SheetIntro />
       </body>
     </html>
   );

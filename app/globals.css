@@ -28,6 +28,13 @@ html {
   scroll-behavior: initial; /* Lenis owns scrolling */
 }
 
+/* Scroll is held while the SheetIntro drawing sheet covers the site */
+html.intro-lock,
+html.intro-lock body {
+  overflow: hidden;
+  height: 100%;
+}
+
 body {
   background-color: var(--cream);
   color: var(--ink);

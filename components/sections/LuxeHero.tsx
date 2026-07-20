@@ -2,97 +2,132 @@
 
 /**
  * LuxeHero — Casted Luxe
- * Full-bleed hero with the bas-relief motion video, "Eternally Yours" centered,
- * and a scroll-driven parallax / fade sequence.
+ * Pinned, scroll-scrubbed hero: the bas-relief film plays *with* the scroll
+ * (not on loop), the text materialises in stages — "Eternally Yours" first,
+ * then the eyebrow and signature lines — and a cream veil melts the section
+ * into the gallery beneath.
  *
- * Zero dependencies. Optimised:
- *  - video only plays when in view (IntersectionObserver)
- *  - rAF-throttled scroll handler, passive listener
- *  - poster + <Image> fallback, so LCP is the still image, not the video
- *  - prefers-reduced-motion → static image, no scroll effects
+ * Scrub technique: ScrollTrigger drives a target time; a gsap.ticker lerp
+ * eases video.currentTime toward it so seeking stays silky under Lenis.
+ * The mp4 is encoded all-intra (every frame a keyframe) for instant seeks.
  *
- * Files expected in /public:
- *  /hero/hero-poster.webp   (optimised still of the bas-relief)
- *  /hero/hero.webm          (VP9/AV1, primary)
- *  /hero/hero.mp4           (H.264, fallback)
+ * prefers-reduced-motion → static poster, all text visible, no pin.
  */
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
 import styles from "./luxe-hero.module.css";
+
+const PIN_LENGTH = "+=260%"; // scroll distance the hero stays pinned
 
 export default function LuxeHero() {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const mediaRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const eyebrowRef = useRef<HTMLParagraphElement>(null);
+  const quoteRef = useRef<HTMLHeadingElement>(null);
+  const ruleRef = useRef<HTMLDivElement>(null);
+  const subRef = useRef<HTMLParagraphElement>(null);
   const veilRef = useRef<HTMLDivElement>(null);
   const [reducedMotion, setReducedMotion] = useState(false);
-  const [loaded, setLoaded] = useState(false);
 
-  // Respect reduced motion
   useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReducedMotion(mq.matches);
-    const onChange = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
+    setReducedMotion(prefersReducedMotion());
   }, []);
 
-  // Play/pause video only while hero is on screen (saves battery + CPU)
   useEffect(() => {
-    const video = videoRef.current;
     const section = sectionRef.current;
-    if (!video || !section || reducedMotion) return;
+    const video = videoRef.current;
+    if (!section || reducedMotion) return;
 
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) video.play().catch(() => {});
-        else video.pause();
-      },
-      { threshold: 0.1 }
-    );
-    io.observe(section);
-    return () => io.disconnect();
-  }, [reducedMotion]);
+    let targetTime = 0;
 
-  // Scroll-driven animation: parallax video, text drift + fade, cream veil in
-  useEffect(() => {
-    if (reducedMotion) return;
-    let ticking = false;
+    const ctx = gsap.context(() => {
+      // Master pinned timeline — everything is scroll-driven.
+      const tl = gsap.timeline({
+        defaults: { ease: "none" },
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: PIN_LENGTH,
+          scrub: true,
+          pin: true,
+          anticipatePin: 1,
+          onUpdate: (self) => {
+            const v = videoRef.current;
+            if (v && v.duration) {
+              // leave a hair of headroom so we never seek past the last frame
+              targetTime = self.progress * (v.duration - 0.06);
+            }
+          },
+        },
+      });
 
-    const update = () => {
-      ticking = false;
-      const section = sectionRef.current;
-      if (!section) return;
-      const h = section.offsetHeight;
-      // 0 at top of page → 1 when hero fully scrolled past
-      const p = Math.min(Math.max(window.scrollY / h, 0), 1);
+      // Slow push-in on the film while pinned
+      tl.fromTo(mediaRef.current, { scale: 1.0 }, { scale: 1.08, duration: 1 }, 0);
 
-      if (mediaRef.current) {
-        // Video scrolls at half speed and gently scales — the "luxury drift"
-        mediaRef.current.style.transform = `translate3d(0, ${p * 50}vh, 0) scale(${1 + p * 0.06})`;
-      }
-      if (contentRef.current) {
-        contentRef.current.style.transform = `translate3d(0, ${p * -12}vh, 0)`;
-        contentRef.current.style.opacity = String(1 - Math.min(p * 1.6, 1));
-      }
-      if (veilRef.current) {
-        // Cream veil eases in near the end so the next section melts in
-        veilRef.current.style.opacity = String(Math.max((p - 0.55) / 0.45, 0));
-      }
+      // Stage 1 — "Eternally Yours" rises out of the marble
+      tl.fromTo(
+        quoteRef.current,
+        { opacity: 0, y: 46 },
+        { opacity: 1, y: 0, duration: 0.16, ease: "power1.out" },
+        0.04,
+      );
+
+      // Stage 2 — the top and bottom lines follow
+      tl.fromTo(
+        eyebrowRef.current,
+        { opacity: 0, y: 18 },
+        { opacity: 1, y: 0, duration: 0.1, ease: "power1.out" },
+        0.2,
+      );
+      tl.fromTo(
+        ruleRef.current,
+        { opacity: 0, scaleX: 0 },
+        { opacity: 1, scaleX: 1, duration: 0.08, ease: "power1.out" },
+        0.24,
+      );
+      tl.fromTo(
+        subRef.current,
+        { opacity: 0, y: 18 },
+        { opacity: 1, y: 0, duration: 0.1, ease: "power1.out" },
+        0.27,
+      );
+
+      // Stage 3 — the composition holds, then lifts away
+      tl.to(
+        contentRef.current,
+        { opacity: 0, y: -70, duration: 0.22, ease: "power1.in" },
+        0.72,
+      );
+
+      // Stage 4 — cream veil melts the film into the gallery beneath
+      tl.to(veilRef.current, { opacity: 1, duration: 0.18 }, 0.82);
+    }, section);
+
+    // Silky video scrub: ease currentTime toward the scroll target each tick
+    const smoothSeek = () => {
+      const v = videoRef.current;
+      if (!v || !v.duration || v.seeking) return;
+      const next = v.currentTime + (targetTime - v.currentTime) * 0.14;
+      if (Math.abs(next - v.currentTime) > 0.002) v.currentTime = next;
     };
+    gsap.ticker.add(smoothSeek);
 
-    const onScroll = () => {
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(update);
-      }
+    // iOS/Safari won't allow programmatic seeking until playback is "blessed";
+    // a muted play()+pause() on load unlocks frame-accurate scrubbing.
+    const unlock = () => {
+      video?.play().then(() => video.pause()).catch(() => {});
     };
+    video?.addEventListener("loadedmetadata", unlock, { once: true });
 
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      gsap.ticker.remove(smoothSeek);
+      video?.removeEventListener("loadedmetadata", unlock);
+      ctx.revert();
+    };
   }, [reducedMotion]);
 
   return (
@@ -103,7 +138,7 @@ export default function LuxeHero() {
       aria-label="Casted Luxe — introduction"
     >
       <div ref={mediaRef} className={styles.media}>
-        {/* Poster renders instantly = fast LCP; video fades over it when ready */}
+        {/* Poster renders instantly = fast LCP; the film sits over it */}
         <Image
           src="/hero/hero-poster.webp"
           alt="Bas-relief sculpture of birds and flowers in cream plaster"
@@ -115,17 +150,14 @@ export default function LuxeHero() {
         {!reducedMotion && (
           <video
             ref={videoRef}
-            className={`${styles.video} ${loaded ? styles.videoVisible : ""}`}
+            className={styles.video}
             muted
-            loop
             playsInline
-            preload="metadata"
+            preload="auto"
             poster="/hero/hero-poster.webp"
-            onCanPlay={() => setLoaded(true)}
             aria-hidden="true"
             tabIndex={-1}
           >
-            <source src="/hero/hero.webm" type="video/webm" />
             <source src="/hero/hero.mp4" type="video/mp4" />
           </video>
         )}
@@ -133,19 +165,20 @@ export default function LuxeHero() {
       </div>
 
       <div ref={contentRef} className={styles.content}>
-        <p className={styles.eyebrow}>Casted Luxe · Atelier of Custom Art</p>
-        <h1 className={styles.quote}>
+        {/* Soft cream bokeh so the type always clears the marble */}
+        <div className={styles.bokeh} aria-hidden="true" />
+        <div className={styles.bokehSmall} aria-hidden="true" />
+
+        <p ref={eyebrowRef} className={`${styles.eyebrow} gsap-reveal`}>
+          Casted Luxe · Atelier of Custom Art
+        </p>
+        <h1 ref={quoteRef} className={`${styles.quote} gsap-reveal`}>
           Eternally <em>Yours</em>
         </h1>
-        <div className={styles.rule} />
-        <p className={styles.sub}>
+        <div ref={ruleRef} className={`${styles.rule} gsap-reveal`} />
+        <p ref={subRef} className={`${styles.sub} gsap-reveal`}>
           Handcrafted by Ashrat&ensp;·&ensp;Every Piece a Signature
         </p>
-      </div>
-
-      <div className={styles.scrollHint} aria-hidden="true">
-        <span>Scroll</span>
-        <i />
       </div>
 
       <div ref={veilRef} className={styles.veil} aria-hidden="true" />

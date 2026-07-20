@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
 import { motion } from "framer-motion";
+import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { useReveal } from "@/lib/useReveal";
 import SectionHeading from "@/components/ui/SectionHeading";
 
@@ -21,12 +23,35 @@ const WORKS = [
 export default function Gallery() {
   const scope = useReveal<HTMLElement>({ stagger: 0.1 });
 
+  // The section emerges from beneath the hero stack: a scrubbed fade + rise
+  // as it enters, instead of scrolling in like a plain page section.
+  useEffect(() => {
+    const el = scope.current;
+    if (!el || prefersReducedMotion()) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        el,
+        { opacity: 0, y: 90, scale: 0.985 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          ease: "none",
+          scrollTrigger: { trigger: el, start: "top bottom", end: "top 25%", scrub: true },
+        },
+      );
+    }, el);
+
+    return () => ctx.revert();
+  }, [scope]);
+
   return (
     <section
       ref={scope}
       id="gallery"
       aria-label="Featured works"
-      className="relative bg-paper/60 py-28 sm:py-36"
+      className="relative z-10 -mt-[50svh] bg-paper/60 py-28 sm:py-36"
     >
       <div className="mx-auto max-w-7xl px-6">
         <SectionHeading eyebrow="Featured Works" title="The Collection" />
