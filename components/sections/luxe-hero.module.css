@@ -139,7 +139,7 @@
    Inner div: its own delayed entrance, so the two opacities never fight. */
 .scrollHint {
   position: absolute;
-  bottom: 30px;
+  bottom: 12px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 2;
@@ -151,8 +151,8 @@
   color: var(--umber);
   font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
   font-style: italic;
-  font-size: 0.78rem;
-  letter-spacing: 0.3em;
+  font-size: 0.66rem;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   /* appears only after the paper sheet has lifted */
   animation: hintIn 0.9s ease 2.6s both;
@@ -172,8 +172,8 @@
 .scrollHintInner i {
   display: block;
   width: 1px;
-  height: 42px;
-  margin: 12px auto 0;
+  height: 26px;
+  margin: 8px auto 0;
   background: var(--umber);
   animation: hintPulse 2.4s var(--ease-luxe) infinite;
 }
@@ -196,6 +196,6 @@
   inset: 0;
   z-index: 3;
   pointer-events: none;
-  background: var(--cream);
+  background: var(--cream) url("/finish.webp") center / cover;
   opacity: 0;
 }

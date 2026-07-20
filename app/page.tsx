@@ -4,7 +4,13 @@ import ArtistTeaser from "@/components/sections/ArtistTeaser";
 
 export default function Home() {
   return (
-    <main>
+    <main className="relative">
+      {/* Hand-plastered ivory finish — home page only */}
+      <div
+        aria-hidden="true"
+        className="fixed inset-0 -z-10 bg-cream bg-cover bg-center"
+        style={{ backgroundImage: "url(/finish.webp)" }}
+      />
       <LuxeHero />
       <CollectionPreview />
       <ArtistTeaser />

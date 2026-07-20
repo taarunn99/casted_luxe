@@ -52,14 +52,9 @@ export default function Navbar() {
           aria-label="Casted Luxe — home"
           className="flex items-center shrink-0"
         >
-          <Image
-            src="/logo.svg"
-            alt="Casted Luxe — by Ashrat"
-            width={120}
-            height={100}
-            preload
-            className="h-14 w-auto sm:h-[4.5rem]"
-          />
+          <span className="font-script text-2xl sm:text-3xl text-ink leading-none pt-1">
+            Casted Luxe
+          </span>
         </Link>
 
         {/* Links — center (desktop) */}

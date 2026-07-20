@@ -48,7 +48,7 @@ export default function CollectionPreview() {
       ref={scope}
       id="after-hero"
       aria-label="The collection — preview"
-      className="relative z-10 -mt-[50svh] bg-paper/60 py-28 sm:py-36"
+      className="relative z-10 -mt-[50svh] bg-paper/40 py-28 sm:py-36"
     >
       <div className="mx-auto max-w-7xl px-6">
         <SectionHeading eyebrow="Featured Works" title="The Collection" />
