@@ -35,7 +35,7 @@ export default function CollectionPreview() {
           y: 0,
           scale: 1,
           ease: "none",
-          scrollTrigger: { trigger: el, start: "top bottom", end: "top 25%", scrub: true },
+          scrollTrigger: { trigger: el, start: "top bottom", end: "top 25%", scrub: 0.6 },
         },
       );
     }, el);

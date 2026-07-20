@@ -23,7 +23,11 @@ export default function SmoothScroll({
       duration: 1.35,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // expo-out glide
       smoothWheel: true,
-      touchMultiplier: 1.5,
+      // Give touch devices the same inertia-smoothed glide as the laptop
+      // wheel experience — this is what makes the scrubbed hero feel silky
+      // on phones instead of tracking raw finger jitter.
+      syncTouch: true,
+      touchMultiplier: 1.2,
       anchors: true, // smooth-scroll #anchor links
     });
     lenisRef.current = lenis;

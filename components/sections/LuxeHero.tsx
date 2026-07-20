@@ -33,15 +33,21 @@ export default function LuxeHero() {
   const veilRef = useRef<HTMLDivElement>(null);
   const hintRef = useRef<HTMLDivElement>(null);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [videoSrc, setVideoSrc] = useState<string | null>(null);
 
   useEffect(() => {
     setReducedMotion(prefersReducedMotion());
+    // Resolution-tiered source: true 2K+ displays (retina laptops, iMac,
+    // Studio Display, TV) get the upscaled master; everything else gets
+    // the lighter 720p-class encode that scrubs faster on phones.
+    const devicePixels = window.innerWidth * (window.devicePixelRatio || 1);
+    setVideoSrc(devicePixels > 2200 ? "/hero/hero-2k.mp4" : "/hero/hero.mp4");
   }, []);
 
   useEffect(() => {
     const section = sectionRef.current;
     const video = videoRef.current;
-    if (!section || reducedMotion) return;
+    if (!section || reducedMotion || !videoSrc) return;
 
     let targetTime = 0;
 
@@ -53,7 +59,7 @@ export default function LuxeHero() {
           trigger: section,
           start: "top top",
           end: PIN_LENGTH,
-          scrub: true,
+          scrub: 0.7, // eased catch-up — smooths out choppy touch scrolling
           pin: true,
           anticipatePin: 1,
           onUpdate: (self) => {
@@ -132,7 +138,7 @@ export default function LuxeHero() {
       video?.removeEventListener("loadedmetadata", unlock);
       ctx.revert();
     };
-  }, [reducedMotion]);
+  }, [reducedMotion, videoSrc]);
 
   return (
     <section
@@ -151,7 +157,7 @@ export default function LuxeHero() {
           sizes="100vw"
           className={styles.poster}
         />
-        {!reducedMotion && (
+        {!reducedMotion && videoSrc && (
           <video
             ref={videoRef}
             className={styles.video}
@@ -161,9 +167,8 @@ export default function LuxeHero() {
             poster="/hero/hero-poster.webp"
             aria-hidden="true"
             tabIndex={-1}
-          >
-            <source src="/hero/hero.mp4" type="video/mp4" />
-          </video>
+            src={videoSrc}
+          />
         )}
         <div className={styles.tint} />
       </div>
