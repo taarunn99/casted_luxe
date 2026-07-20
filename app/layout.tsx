@@ -19,23 +19,23 @@ const cormorant = Cormorant_Garamond({
   display: "swap",
 });
 
-const siteUrl = "https://craftedluxe.com";
+const siteUrl = "https://castedluxe.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Crafted Luxe — Custom Art Pieces by Ashrat",
-    template: "%s · Crafted Luxe",
+    default: "Casted Luxe — Custom Art Pieces by Ashrat",
+    template: "%s · Casted Luxe",
   },
   description:
-    "Crafted Luxe is a luxury arts & crafts atelier by Ashrat — bespoke, handcrafted art pieces made to commission. Custom artworks with an artist's touch.",
+    "Casted Luxe is a luxury arts & crafts atelier by Ashrat — bespoke, handcrafted art pieces made to commission. Custom artworks with an artist's touch.",
   keywords: [
     "custom art pieces",
     "handcrafted art",
     "luxury crafts",
     "bespoke artwork",
     "commissioned art",
-    "Crafted Luxe",
+    "Casted Luxe",
     "Ashrat",
     "art atelier",
   ],
@@ -43,15 +43,15 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: siteUrl,
-    siteName: "Crafted Luxe",
-    title: "Crafted Luxe — Custom Art Pieces by Ashrat",
+    siteName: "Casted Luxe",
+    title: "Casted Luxe — Custom Art Pieces by Ashrat",
     description:
       "Luxury handcrafted art pieces, made to commission by Ashrat. Every piece a signature.",
-    images: [{ url: "/logo.svg", width: 1200, height: 1200, alt: "Crafted Luxe logo" }],
+    images: [{ url: "/logo.svg", width: 1200, height: 1200, alt: "Casted Luxe logo" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Crafted Luxe — Custom Art Pieces by Ashrat",
+    title: "Casted Luxe — Custom Art Pieces by Ashrat",
     description:
       "Luxury handcrafted art pieces, made to commission by Ashrat. Every piece a signature.",
     images: ["/logo.svg"],
@@ -69,7 +69,7 @@ const jsonLd = {
     {
       "@type": "Organization",
       "@id": `${siteUrl}/#organization`,
-      name: "Crafted Luxe",
+      name: "Casted Luxe",
       url: siteUrl,
       logo: `${siteUrl}/logo.svg`,
       email: "tarun.s@lapizblue.com",
@@ -87,14 +87,14 @@ const jsonLd = {
       name: "Ashrat",
       jobTitle: "Artist",
       description:
-        "Artist and founder of Crafted Luxe, creating bespoke handcrafted art pieces to commission.",
+        "Artist and founder of Casted Luxe, creating bespoke handcrafted art pieces to commission.",
       worksFor: { "@id": `${siteUrl}/#organization` },
     },
     {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       url: siteUrl,
-      name: "Crafted Luxe",
+      name: "Casted Luxe",
       publisher: { "@id": `${siteUrl}/#organization` },
       inLanguage: "en",
     },

@@ -37,19 +37,19 @@ export default function Navbar() {
         {/* Logo — left */}
         <Link
           href="#top"
-          aria-label="Crafted Luxe — home"
+          aria-label="Casted Luxe — home"
           className="flex items-center gap-2 shrink-0"
         >
           <Image
             src="/logo.svg"
-            alt="Crafted Luxe logo"
+            alt="Casted Luxe logo"
             width={64}
             height={64}
             priority
             className="h-14 w-14 sm:h-16 sm:w-16"
           />
           <span className="font-script text-2xl sm:text-3xl text-ink leading-none pt-1">
-            Crafted Luxe
+            Casted Luxe
           </span>
         </Link>
 

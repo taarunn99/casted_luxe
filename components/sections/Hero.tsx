@@ -58,7 +58,7 @@ export default function Hero() {
     <section
       ref={scope}
       id="top"
-      aria-label="Crafted Luxe — introduction"
+      aria-label="Casted Luxe — introduction"
       className="relative flex min-h-svh flex-col items-center justify-center overflow-hidden px-6 text-center"
     >
       {/* Soft lavender wash behind the headline */}
@@ -73,7 +73,7 @@ export default function Hero() {
         </p>
 
         <h1 className="hero-item mt-4 font-script text-7xl sm:text-8xl lg:text-9xl leading-[1.15] text-ink opacity-0">
-          Crafted Luxe
+          Casted Luxe
         </h1>
 
         {/* Hand-drawn flourish */}

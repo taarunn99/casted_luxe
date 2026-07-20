@@ -8,12 +8,12 @@ export default function Footer() {
         <Link href="#top" aria-label="Back to top" className="flex items-center gap-2">
           <Image
             src="/logo.svg"
-            alt="Crafted Luxe logo"
+            alt="Casted Luxe logo"
             width={56}
             height={56}
             className="h-12 w-12"
           />
-          <span className="font-script text-3xl text-ink">Crafted Luxe</span>
+          <span className="font-script text-3xl text-ink">Casted Luxe</span>
         </Link>
         <p className="max-w-md font-serif italic text-lg text-umber">
           Custom art pieces, handcrafted by Ashrat.
@@ -38,7 +38,7 @@ export default function Footer() {
         </nav>
         <div className="pencil-rule w-48" />
         <p className="font-serif text-sm text-umber/80">
-          © {new Date().getFullYear()} Crafted Luxe · All pieces are original
+          © {new Date().getFullYear()} Casted Luxe · All pieces are original
           works by Ashrat
         </p>
       </div>

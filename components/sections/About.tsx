@@ -54,7 +54,7 @@ export default function About() {
 
         <div className="max-w-prose">
           <p className="gsap-reveal font-serif text-2xl leading-relaxed text-ink">
-            Every Crafted Luxe piece begins as a conversation — a memory, a
+            Every Casted Luxe piece begins as a conversation — a memory, a
             feeling, a story you want to hold in your hands.
           </p>
           <p className="gsap-reveal mt-6 font-serif text-xl leading-relaxed text-ink/90">

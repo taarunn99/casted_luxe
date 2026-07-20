@@ -8,7 +8,7 @@ const ENQUIRY_EMAIL = "tarun.s@lapizblue.com";
 const WHATSAPP_URL =
   "https://wa.me/971558005474?text=" +
   encodeURIComponent(
-    "Hello Crafted Luxe — I'd love to commission a customised art piece.",
+    "Hello Casted Luxe — I'd love to commission a customised art piece.",
   );
 
 export default function Contact() {
@@ -18,7 +18,7 @@ export default function Contact() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const subject = encodeURIComponent(
-      `Commission enquiry — ${form.name || "Crafted Luxe website"}`,
+      `Commission enquiry — ${form.name || "Casted Luxe website"}`,
     );
     const body = encodeURIComponent(
       `Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`,

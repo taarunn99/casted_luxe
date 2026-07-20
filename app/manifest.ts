@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Crafted Luxe — Custom Art Pieces by Ashrat",
-    short_name: "Crafted Luxe",
+    name: "Casted Luxe — Custom Art Pieces by Ashrat",
+    short_name: "Casted Luxe",
     description:
       "Luxury handcrafted art pieces, made to commission by Ashrat.",
     start_url: "/",
