@@ -50,14 +50,14 @@ export const metadata: Metadata = {
     title: "Casted Luxe — Custom Art Pieces by Ashrat",
     description:
       "Luxury handcrafted art pieces, made to commission by Ashrat. Every piece a signature.",
-    images: [{ url: "/logo.svg", width: 1200, height: 1200, alt: "Casted Luxe logo" }],
+    images: [{ url: "/og-logo.png", width: 1200, height: 630, alt: "Casted Luxe — by Ashrat" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Casted Luxe — Custom Art Pieces by Ashrat",
     description:
       "Luxury handcrafted art pieces, made to commission by Ashrat. Every piece a signature.",
-    images: ["/logo.svg"],
+    images: ["/og-logo.png"],
   },
   robots: {
     index: true,
@@ -74,7 +74,7 @@ const jsonLd = {
       "@id": `${siteUrl}/#organization`,
       name: "Casted Luxe",
       url: siteUrl,
-      logo: `${siteUrl}/logo.svg`,
+      logo: `${siteUrl}/og-logo.png`,
       email: "tarun.s@lapizblue.com",
       contactPoint: {
         "@type": "ContactPoint",

@@ -53,12 +53,12 @@ export default function Navbar() {
           className="flex items-center gap-2 shrink-0"
         >
           <Image
-            src="/logo.svg"
-            alt="Casted Luxe logo"
+            src="/logo-mark.svg"
+            alt="Casted Luxe monogram"
             width={64}
             height={64}
-            priority
-            className="h-14 w-14 sm:h-16 sm:w-16"
+            preload
+            className="h-11 w-11 sm:h-12 sm:w-12"
           />
           <span className="font-script text-2xl sm:text-3xl text-ink leading-none pt-1">
             Casted Luxe

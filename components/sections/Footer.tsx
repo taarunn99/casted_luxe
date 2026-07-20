@@ -5,15 +5,14 @@ export default function Footer() {
   return (
     <footer className="border-t border-umber/15 bg-cream py-12">
       <div className="mx-auto flex max-w-7xl flex-col items-center gap-6 px-6 text-center">
-        <Link href="/" aria-label="Casted Luxe — home" className="flex items-center gap-2">
+        <Link href="/" aria-label="Casted Luxe — home">
           <Image
             src="/logo.svg"
-            alt="Casted Luxe logo"
-            width={56}
-            height={56}
-            className="h-12 w-12"
+            alt="Casted Luxe — by Ashrat"
+            width={240}
+            height={200}
+            className="h-40 w-auto"
           />
-          <span className="font-script text-3xl text-ink">Casted Luxe</span>
         </Link>
         <p className="max-w-md font-serif italic text-lg text-umber">
           Custom art pieces, handcrafted by Ashrat.
