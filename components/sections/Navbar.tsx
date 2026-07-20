@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -50,16 +49,8 @@ export default function Navbar() {
         <Link
           href="/"
           aria-label="Casted Luxe — home"
-          className="flex items-center gap-2 shrink-0"
+          className="flex items-center shrink-0"
         >
-          <Image
-            src="/logo-mark.svg"
-            alt="Casted Luxe monogram"
-            width={64}
-            height={64}
-            preload
-            className="h-11 w-11 sm:h-12 sm:w-12"
-          />
           <span className="font-script text-2xl sm:text-3xl text-ink leading-none pt-1">
             Casted Luxe
           </span>
