@@ -81,6 +81,15 @@ body {
   mix-blend-mode: multiply;
 }
 
+/* Touch devices: the full-screen multiply blend is expensive on mobile
+   GPUs and drags the pinned scroll — the grain is imperceptible at phone
+   size anyway, so drop it there for a fluid 60fps scrub. */
+@media (hover: none) and (pointer: coarse) {
+  .paper-grain {
+    display: none;
+  }
+}
+
 /* Deckled / hand-torn sheet edge for mats & frames */
 .sheet-edge {
   box-shadow:

@@ -19,7 +19,10 @@ import Image from "next/image";
 import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
 import styles from "./luxe-hero.module.css";
 
-const PIN_LENGTH = "+=260%"; // scroll distance the hero stays pinned
+// Scroll distance the hero stays pinned — shorter on touch devices so the
+// sequence completes in fewer swipes and feels faster.
+const PIN_DESKTOP = "+=260%";
+const PIN_TOUCH = "+=165%";
 
 export default function LuxeHero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -50,6 +53,8 @@ export default function LuxeHero() {
     if (!section || reducedMotion || !videoSrc) return;
 
     let targetTime = 0;
+    // Touch: tighter scrub + shorter pin = fast, fluid, finger-connected.
+    const isTouch = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 
     const ctx = gsap.context(() => {
       // Master pinned timeline — everything is scroll-driven.
@@ -58,8 +63,8 @@ export default function LuxeHero() {
         scrollTrigger: {
           trigger: section,
           start: "top top",
-          end: PIN_LENGTH,
-          scrub: 0.7, // eased catch-up — smooths out choppy touch scrolling
+          end: isTouch ? PIN_TOUCH : PIN_DESKTOP,
+          scrub: isTouch ? 0.3 : 0.7,
           pin: true,
           anticipatePin: 1,
           onUpdate: (self) => {
@@ -117,11 +122,13 @@ export default function LuxeHero() {
       tl.to(hintRef.current, { opacity: 0, duration: 0.03, ease: "none" }, 0.004);
     }, section);
 
-    // Silky video scrub: ease currentTime toward the scroll target each tick
+    // Silky video scrub: ease currentTime toward the scroll target each tick.
+    // Touch devices get a stronger pull so the film answers the finger quickly.
+    const seekLerp = isTouch ? 0.24 : 0.14;
     const smoothSeek = () => {
       const v = videoRef.current;
       if (!v || !v.duration || v.seeking) return;
-      const next = v.currentTime + (targetTime - v.currentTime) * 0.14;
+      const next = v.currentTime + (targetTime - v.currentTime) * seekLerp;
       if (Math.abs(next - v.currentTime) > 0.002) v.currentTime = next;
     };
     gsap.ticker.add(smoothSeek);

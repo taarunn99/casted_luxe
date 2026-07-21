@@ -26,6 +26,7 @@ export default function CollectionPreview() {
     const el = scope.current;
     if (!el || prefersReducedMotion()) return;
 
+    const isTouch = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
     const ctx = gsap.context(() => {
       gsap.fromTo(
         el,
@@ -35,7 +36,12 @@ export default function CollectionPreview() {
           y: 0,
           scale: 1,
           ease: "none",
-          scrollTrigger: { trigger: el, start: "top bottom", end: "top 25%", scrub: 0.6 },
+          scrollTrigger: {
+            trigger: el,
+            start: "top bottom",
+            end: "top 25%",
+            scrub: isTouch ? 0.25 : 0.6,
+          },
         },
       );
     }, el);
