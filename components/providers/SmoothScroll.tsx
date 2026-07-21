@@ -23,11 +23,10 @@ export default function SmoothScroll({
       duration: 1.35,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // expo-out glide
       smoothWheel: true,
-      // Give touch devices the same inertia-smoothed glide as the laptop
-      // wheel experience — this is what makes the scrubbed hero feel silky
-      // on phones instead of tracking raw finger jitter.
-      syncTouch: true,
-      touchMultiplier: 1.2,
+      // Touch stays NATIVE: Lenis's synthetic touch (syncTouch) hard-locks
+      // scrolling on iOS WebKit with pinned sections. Phone smoothness comes
+      // from the eased scrub (0.7) + the video seek lerp instead.
+      touchMultiplier: 1.5,
       anchors: true, // smooth-scroll #anchor links
     });
     lenisRef.current = lenis;
