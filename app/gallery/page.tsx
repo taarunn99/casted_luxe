@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import GalleryHero from "@/components/sections/GalleryHero";
 import Gallery from "@/components/sections/Gallery";
 
 export const metadata: Metadata = {
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
 export default function GalleryPage() {
   return (
     <main>
+      <GalleryHero />
       <Gallery />
     </main>
   );
