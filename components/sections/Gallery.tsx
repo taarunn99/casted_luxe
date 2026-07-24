@@ -6,15 +6,18 @@ import { useReveal } from "@/lib/useReveal";
 import SectionHeading from "@/components/ui/SectionHeading";
 
 /**
- * The Collection — stepped showcase.
- * The stage pins for the whole collection; each scroll step dissolves the
- * current piece away and materialises the next (an appearance, not a
- * scroll-past), while the page background tweens to that piece's tone.
- * Every piece is a bento card: artwork on one side, name / art style /
+ * The Collection — continuous colour-morph showcase (heyblackmagic-style).
+ * Pieces live in normal scroll flow, one viewport each: the previous piece
+ * slips away smaller above, the next rises from below, and the section
+ * background crossfades to each piece's vibrant tone as it takes the
+ * frame. Cards ease up to full size as they arrive and shrink gently as
+ * they leave, so every scroll reads as an appearance — never a hijack.
+ *
+ * Each piece is a bento card: artwork on one side, name / art style /
  * detail tiles beside it, and per-piece commission CTAs (WhatsApp Hamdan,
  * email enquiry).
  *
- * prefers-reduced-motion → no pin, all pieces stacked and visible.
+ * prefers-reduced-motion → static stacked list, no colour morph.
  * Artwork tiles are placeholders until the photographs arrive.
  */
 
@@ -28,7 +31,7 @@ const WORKS = [
     style: "Bas-Relief Impasto",
     medium: "Mixed media on canvas",
     size: "Made to measure",
-    theme: "#f1efe3",
+    theme: "#b3202c", // carmine
   },
   {
     title: "Commission II",
@@ -36,7 +39,7 @@ const WORKS = [
     style: "Textured Abstract",
     medium: "Textured acrylic",
     size: "Made to measure",
-    theme: "#ece4fa",
+    theme: "#3e1f71", // deep violet
   },
   {
     title: "Commission III",
@@ -44,7 +47,7 @@ const WORKS = [
     style: "Layered Relief",
     medium: "Hand-layered relief",
     size: "Made to measure",
-    theme: "#e7dccb",
+    theme: "#c4551a", // burnt sienna
   },
   {
     title: "Commission IV",
@@ -52,7 +55,7 @@ const WORKS = [
     style: "Ink & Gilding",
     medium: "Ink & gold leaf",
     size: "Made to measure",
-    theme: "#dde3d5",
+    theme: "#0e6b5c", // deep teal
   },
   {
     title: "Commission V",
@@ -60,7 +63,7 @@ const WORKS = [
     style: "Sculptural Canvas",
     medium: "Sculpted canvas",
     size: "Made to measure",
-    theme: "#ecdcd5",
+    theme: "#b41e63", // magenta
   },
   {
     title: "Commission VI",
@@ -68,7 +71,7 @@ const WORKS = [
     style: "Mixed Media Assemblage",
     medium: "Bespoke wall piece",
     size: "Made to measure",
-    theme: "#ded8e6",
+    theme: "#2c3782", // indigo
   },
 ];
 
@@ -137,18 +140,18 @@ function BentoPiece({ work }: { work: Work }) {
       <ArtworkTile work={work} />
 
       <div className="flex min-h-0 flex-col justify-center gap-3 sm:gap-4">
-        {/* Name tile — takes the piece's own tone */}
+        {/* Name tile — carries the piece's own vibrant tone */}
         <div
           className="sheet-edge rounded-2xl px-6 py-5 sm:px-8 sm:py-7"
           style={{ backgroundColor: work.theme }}
         >
-          <p className="font-serif text-xs uppercase tracking-[0.3em] text-umber/70">
+          <p className="font-serif text-xs uppercase tracking-[0.3em] text-cream/70">
             {work.numeral} — of six
           </p>
-          <h3 className="mt-2 font-script text-4xl text-ink sm:text-5xl">
+          <h3 className="mt-2 font-script text-4xl text-cream sm:text-5xl">
             {work.title}
           </h3>
-          <p className="mt-2 font-serif text-base italic text-umber sm:text-lg">
+          <p className="mt-2 font-serif text-base italic text-cream/85 sm:text-lg">
             {work.medium}
           </p>
         </div>
@@ -204,9 +207,7 @@ function BentoPiece({ work }: { work: Work }) {
 export default function Gallery() {
   const scope = useReveal<HTMLElement>();
   const sectionRef = useRef<HTMLElement | null>(null);
-  const stageRef = useRef<HTMLDivElement>(null);
   const [reducedMotion, setReducedMotion] = useState(false);
-  const [active, setActive] = useState(0);
 
   useEffect(() => {
     setReducedMotion(prefersReducedMotion());
@@ -214,69 +215,57 @@ export default function Gallery() {
 
   useEffect(() => {
     const section = sectionRef.current;
-    const stage = stageRef.current;
-    if (!section || !stage || reducedMotion) return;
-
-    const pieces = Array.from(
-      stage.querySelectorAll<HTMLElement>("[data-piece]"),
-    );
-    let current = 0;
+    if (!section || reducedMotion) return;
 
     const ctx = gsap.context(() => {
-      // All pieces stacked; only the first is visible at rest
-      gsap.set(pieces.slice(1), { autoAlpha: 0 });
+      const pieces = gsap.utils.toArray<HTMLElement>("[data-piece]");
 
-      // Step-change: outgoing piece dissolves away, incoming materialises.
-      // Tween-based (not scrubbed) so each step reads as an appearance and
-      // any landing scroll position still shows a fully-formed piece.
-      const goTo = (idx: number, dir: number) => {
-        if (idx === current) return;
-        const prev = current;
-        current = idx;
-        setActive(idx);
+      pieces.forEach((piece) => {
+        const card = piece.querySelector<HTMLElement>("[data-card]");
+        const theme = piece.dataset.theme as string;
 
-        gsap.to(pieces[prev], {
-          autoAlpha: 0,
-          y: dir > 0 ? -44 : 44,
-          scale: 0.985,
-          duration: 0.4,
-          ease: "power2.in",
-          overwrite: "auto",
+        // Background crossfades to the piece's tone as it takes the frame
+        ScrollTrigger.create({
+          trigger: piece,
+          start: "top 55%",
+          end: "bottom 45%",
+          onEnter: () =>
+            gsap.to(section, {
+              backgroundColor: theme,
+              duration: 0.7,
+              ease: "power2.out",
+              overwrite: "auto",
+            }),
+          onEnterBack: () =>
+            gsap.to(section, {
+              backgroundColor: theme,
+              duration: 0.7,
+              ease: "power2.out",
+              overwrite: "auto",
+            }),
         });
-        gsap.fromTo(
-          pieces[idx],
-          { autoAlpha: 0, y: dir > 0 ? 56 : -56, scale: 0.99 },
-          {
-            autoAlpha: 1,
-            y: 0,
-            scale: 1,
-            duration: 0.65,
-            delay: 0.16,
-            ease: "power3.out",
-            overwrite: "auto",
-          },
-        );
-        gsap.to(section, {
-          backgroundColor: WORKS[idx].theme,
-          duration: 0.9,
-          ease: "power2.out",
-          overwrite: "auto",
-        });
-      };
 
-      ScrollTrigger.create({
-        trigger: stage,
-        start: "top top",
-        end: `+=${WORKS.length * 85}%`,
-        pin: true,
-        anticipatePin: 1,
-        onUpdate: (self) => {
-          const idx = Math.min(
-            WORKS.length - 1,
-            Math.round(self.progress * (WORKS.length - 1)),
+        // Appearance scrub: rises to full size as it arrives, recedes
+        // smaller as it leaves — the neighbours read as previews.
+        gsap
+          .timeline({
+            scrollTrigger: {
+              trigger: piece,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            },
+          })
+          .fromTo(
+            card,
+            { y: 72, scale: 0.93 },
+            { y: 0, scale: 1, ease: "power1.out", duration: 0.42 },
+          )
+          .to(
+            card,
+            { y: -72, scale: 0.95, ease: "power1.in", duration: 0.42 },
+            0.58,
           );
-          goTo(idx, self.direction);
-        },
       });
     }, section);
 
@@ -291,9 +280,9 @@ export default function Gallery() {
       }}
       id="gallery"
       aria-label="Featured works"
-      className="relative bg-cream pt-28 sm:pt-36"
+      className="relative bg-cream pt-28 pb-16 sm:pt-36 sm:pb-24"
     >
-      <div className="mx-auto max-w-7xl px-6 pb-10 sm:pb-14">
+      <div className="mx-auto max-w-7xl px-6 pb-6 sm:pb-10">
         <SectionHeading eyebrow="Featured Works" title="The Collection" />
 
         <p className="gsap-reveal mx-auto mt-8 max-w-2xl text-center font-serif text-xl italic text-umber">
@@ -302,38 +291,20 @@ export default function Gallery() {
         </p>
       </div>
 
-      {reducedMotion ? (
-        /* Reduced motion: simple stacked flow, everything visible */
-        <div className="mx-auto max-w-6xl space-y-16 px-6 pb-28">
-          {WORKS.map((work) => (
-            <article key={work.title} className="h-[80svh] min-h-[520px]">
-              <BentoPiece work={work} />
-            </article>
-          ))}
-        </div>
-      ) : (
-        /* Pinned stage: each scroll step summons the next piece */
-        <div ref={stageRef} className="relative h-svh min-h-[600px]">
-          {WORKS.map((work, i) => (
-            <article
-              key={work.title}
-              data-piece
-              aria-hidden={i !== active}
-              className="absolute inset-0 flex items-center justify-center px-5 pb-16 pt-20 sm:px-8 sm:pb-20 sm:pt-24"
-            >
-              <BentoPiece work={work} />
-            </article>
-          ))}
-
-          {/* Progress marker */}
-          <div
-            className="pointer-events-none absolute bottom-5 left-1/2 -translate-x-1/2 font-serif text-sm tracking-[0.3em] text-umber/80"
-            aria-live="polite"
+      <div className="mx-auto max-w-6xl px-5 sm:px-8">
+        {WORKS.map((work) => (
+          <article
+            key={work.title}
+            data-piece
+            data-theme={work.theme}
+            className="flex min-h-[92svh] items-center justify-center py-8"
           >
-            {WORKS[active].numeral}&thinsp;/&thinsp;VI
-          </div>
-        </div>
-      )}
+            <div data-card className="h-[76svh] min-h-[520px] w-full">
+              <BentoPiece work={work} />
+            </div>
+          </article>
+        ))}
+      </div>
     </section>
   );
 }
