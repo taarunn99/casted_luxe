@@ -143,6 +143,22 @@ const WORKS: Work[] = [
     image: "/gallery/andalus.webp",
     alt: "Andalus — a round jewel-toned alcohol-ink and resin artwork laced with white arabesque patterns, set in a Moorish arched sandstone niche with lattice light",
   },
+  {
+    title: "Qamar",
+    numeral: "VII",
+    style: "Illuminated Relief",
+    medium: "‘Moon’ · Backlit hand-carved relief",
+    materials:
+      "Hand-carved lunar relief · Round frame · Warm backlight",
+    size: "Round · Freestanding · Made to measure",
+    story:
+      "A full moon you can keep lit — hand-carved craters that glow a room to dusk, long after the desert sky goes dark.",
+    craft:
+      "Every crater carved by hand into the disc, then lit from within so the ridges catch the light like real lunar shadow.",
+    theme: "#131620", // cool midnight — the night sky the moon rises from
+    image: "/gallery/qamar.webp",
+    alt: "Qamar — a backlit hand-carved lunar relief glowing in a round frame on desert sand beneath a starry night sky",
+  },
 ];
 
 const whatsappUrl = (work: Work) =>
@@ -227,7 +243,7 @@ function ArtworkTile({ work }: { work: Work }) {
             {isLandscape && (
               <div className="pointer-events-none absolute right-0 top-0 max-w-[78%] rounded-bl-3xl bg-gradient-to-bl from-ink/80 via-ink/45 to-transparent pb-10 pl-14 pr-4 pt-3 text-right sm:pr-6 sm:pt-4">
                 <p className="font-serif text-[0.6rem] uppercase tracking-[0.3em] text-cream/85 sm:text-xs">
-                  {work.numeral} — of six
+                  {work.numeral} — of seven
                 </p>
                 <p className="mt-0.5 font-script text-3xl leading-tight text-cream sm:text-4xl">
                   {work.title}
@@ -301,7 +317,7 @@ function NameTile({ work, className = "" }: { work: Work; className?: string }) 
       style={{ backgroundColor: work.theme }}
     >
       <p className="font-serif text-xs uppercase tracking-[0.3em] text-cream/70">
-        {work.numeral} — of six
+        {work.numeral} — of seven
       </p>
       <h3 className="mt-2 font-script text-4xl text-cream sm:text-5xl">
         {work.title}
@@ -555,7 +571,7 @@ export default function Gallery() {
         <SectionHeading eyebrow="Featured Works" title="The Collection" />
 
         <p className="gsap-reveal mx-auto mt-8 max-w-2xl text-center font-serif text-xl italic text-umber">
-          Six original commissions, each one made to be lived with —
+          Seven original commissions, each one made to be lived with —
           scroll to wander the collection.
         </p>
       </div>

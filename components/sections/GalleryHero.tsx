@@ -174,7 +174,7 @@ export default function GalleryHero() {
       <div ref={topBarRef} className={styles.topBar}>
         <p className={`${styles.eyebrow} gsap-reveal`}>The Gallery</p>
         <p className={`${styles.counter} gsap-reveal`} aria-label="Six commissions">
-          I&thinsp;—&thinsp;VI
+          I&thinsp;—&thinsp;VII
         </p>
       </div>
 
