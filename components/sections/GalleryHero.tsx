@@ -56,7 +56,10 @@ export default function GalleryHero() {
 
   useEffect(() => {
     const section = sectionRef.current;
-    if (!section || reducedMotion) return;
+    // Wait for `tier` so the <video> (rendered only once tier resolves) is
+    // in the DOM before the pinned timeline captures its ref — otherwise the
+    // filter tween targets null and floods the scrub with "target not found".
+    if (!section || reducedMotion || !tier) return;
 
     const isTouch = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 
@@ -97,7 +100,7 @@ export default function GalleryHero() {
         { opacity: 0, duration: 0.7, ease: "power1.in" },
         0.18,
       );
-      if (!isTouch) {
+      if (!isTouch && videoRef.current) {
         // Desktop gets the full desaturate-to-vivid ramp; filters over a
         // playing film are too costly on mobile GPUs, where the veil
         // alone carries the effect.
@@ -121,7 +124,7 @@ export default function GalleryHero() {
     }, section);
 
     return () => ctx.revert();
-  }, [reducedMotion]);
+  }, [reducedMotion, tier]);
 
   return (
     <section

@@ -9,6 +9,22 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
  * Lenis drives the scroll position; ScrollTrigger listens to it,
  * and GSAP's ticker drives Lenis' rAF loop for perfect sync.
  */
+
+// Module-level handle so overlays (e.g. the gallery lightbox) can freeze
+// the page. lockScroll pauses Lenis and hides overflow; the overflow rule
+// also covers the reduced-motion path where no Lenis instance exists.
+let activeLenis: Lenis | null = null;
+
+export function lockScroll() {
+  activeLenis?.stop();
+  document.documentElement.style.overflow = "hidden";
+}
+
+export function unlockScroll() {
+  activeLenis?.start();
+  document.documentElement.style.overflow = "";
+}
+
 export default function SmoothScroll({
   children,
 }: {
@@ -30,6 +46,7 @@ export default function SmoothScroll({
       anchors: true, // smooth-scroll #anchor links
     });
     lenisRef.current = lenis;
+    activeLenis = lenis;
 
     lenis.on("scroll", ScrollTrigger.update);
 
@@ -41,6 +58,7 @@ export default function SmoothScroll({
       gsap.ticker.remove(tick);
       lenis.destroy();
       lenisRef.current = null;
+      activeLenis = null;
     };
   }, []);
 
