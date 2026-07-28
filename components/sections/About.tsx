@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useReveal } from "@/lib/useReveal";
 import SectionHeading from "@/components/ui/SectionHeading";
 
@@ -16,39 +17,23 @@ export default function About() {
       <SectionHeading eyebrow="The Artist" title="By Ashrat" />
 
       <div className="mt-16 grid items-center gap-12 md:grid-cols-2">
-        {/* Portrait placeholder — swaps for photoshoot image later */}
+        {/* Portrait of Ashrat */}
         <figure className="gsap-reveal relative mx-auto w-full max-w-md">
-          <div className="sheet-edge relative aspect-[4/5] rounded-sm bg-paper p-4">
-            <div className="flex h-full w-full items-center justify-center rounded-sm border border-umber/20 bg-cream">
-              <div className="text-center px-8">
-                <svg
-                  className="mx-auto mb-4 text-umber/50"
-                  width="56"
-                  height="56"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M12 19l7-7 3 3-7 7-3-3z" />
-                  <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" />
-                  <path d="M2 2l7.586 7.586" />
-                  <circle cx="11" cy="11" r="2" />
-                </svg>
-                <p className="font-script text-3xl text-umber/70">Ashrat</p>
-                <p className="mt-1 font-serif italic text-umber/60">
-                  Portrait from the atelier — coming soon
-                </p>
-              </div>
+          <div className="sheet-edge relative rounded-xl border border-umber/40 bg-paper p-1.5">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[3px] border border-umber/15 bg-cream">
+              <Image
+                src="/about/ashrat-portrait.webp"
+                alt="Portrait of Ashrat, the artist behind Casted Luxe"
+                fill
+                sizes="(min-width: 768px) 28rem, 90vw"
+                className="object-cover object-[center_30%]"
+              />
             </div>
           </div>
           {/* Lavender accent corner */}
           <div
             aria-hidden="true"
-            className="absolute -bottom-4 -right-4 -z-10 h-full w-full rounded-sm bg-lilac"
+            className="absolute -bottom-4 -right-4 -z-10 h-full w-full rounded-xl bg-lilac"
           />
         </figure>
 
