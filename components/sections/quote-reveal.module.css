@@ -22,7 +22,7 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  clip-path: inset(38% 42% round 0.9rem);
+  clip-path: inset(39% 15% 39% 69% round 0.9rem);
   will-change: clip-path;
 }
 
@@ -57,20 +57,22 @@
   will-change: opacity;
 }
 
-/* ---------- the quote over the mask ---------- */
+/* ---------- the quote beside the box ----------
+   The line sits right-aligned against the small video square (which
+   lives on the right), the pair reading as one centred composition. */
 .quote {
   position: absolute;
   z-index: 3;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  left: 5%;
+  right: 42%;
+  transform: translateY(-50%);
   margin: 0;
-  width: min(92vw, 18ch);
-  text-align: center;
+  text-align: right;
   font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
   font-weight: 600;
-  font-size: clamp(2.9rem, 9.2vw, 7.75rem);
-  line-height: 1.02;
+  font-size: clamp(2.6rem, 7vw, 6.5rem);
+  line-height: 1.04;
   letter-spacing: 0.005em;
   color: var(--cream, #f1efe3);
   text-shadow: 0 2px 34px rgba(0, 0, 0, 0.5);
@@ -78,9 +80,43 @@
   will-change: opacity, transform;
 }
 
+@media (min-width: 768px) {
+  .quote {
+    left: 6%;
+    right: 33%;
+  }
+}
+
 .quote em {
   font-style: italic;
   font-weight: 500;
+}
+
+/* ---------- the second beat, deep in the scroll ----------
+   Three words that surface over the full-bleed film, right-most
+   aligned, each line arriving on its own scroll beat. */
+.mantra {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  right: clamp(1.5rem, 6vw, 6rem);
+  transform: translateY(-50%);
+  margin: 0;
+  text-align: right;
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+  font-weight: 600;
+  font-size: clamp(1.9rem, 4.6vw, 4rem);
+  line-height: 1.22;
+  letter-spacing: 0.01em;
+  color: var(--cream, #f1efe3);
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+}
+
+.mantraLine {
+  display: block;
+  opacity: 0;
+  will-change: opacity, transform;
 }
 
 /* ---------- scroll cue (same voice as the heroes) ---------- */

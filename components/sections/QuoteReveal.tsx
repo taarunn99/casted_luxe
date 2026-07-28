@@ -24,9 +24,11 @@ import styles from "./quote-reveal.module.css";
 const PIN_DESKTOP = "+=200%";
 const PIN_TOUCH = "+=140%";
 
-const CLIP_START_DESKTOP = "inset(38% 42% round 0.9rem)";
-const CLIP_START_TOUCH = "inset(42% 31% round 0.75rem)";
-const CLIP_END = "inset(0% 0% round 0rem)";
+// The small square starts on the RIGHT of the quote — the pair reads as
+// one centred composition on the dark ground — then blooms to full bleed.
+const CLIP_START_DESKTOP = "inset(39% 15% 39% 69% round 0.9rem)";
+const CLIP_START_TOUCH = "inset(41% 6% 41% 60% round 0.75rem)";
+const CLIP_END = "inset(0% 0% 0% 0% round 0rem)";
 
 export default function QuoteReveal() {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -35,6 +37,7 @@ export default function QuoteReveal() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const washRef = useRef<HTMLDivElement | null>(null);
   const quoteRef = useRef<HTMLHeadingElement | null>(null);
+  const mantraRef = useRef<HTMLParagraphElement | null>(null);
   const hintRef = useRef<HTMLDivElement | null>(null);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [tier, setTier] = useState<"desktop" | "mobile" | null>(null);
@@ -100,6 +103,20 @@ export default function QuoteReveal() {
         0.26,
       );
 
+      // deep in the scroll, the second beat surfaces over the film —
+      // three words arriving line by line, right-most aligned
+      const lines = mantraRef.current
+        ? Array.from(mantraRef.current.children)
+        : [];
+      lines.forEach((line, i) => {
+        tl.fromTo(
+          line,
+          { opacity: 0, y: 28 },
+          { opacity: 1, y: 0, duration: 0.12, ease: "power1.out" },
+          0.62 + i * 0.11,
+        );
+      });
+
       // scroll cue dies the instant the visitor scrolls
       tl.to(hintRef.current, { opacity: 0, duration: 0.03, ease: "none" }, 0.004);
     }, section);
@@ -147,6 +164,14 @@ export default function QuoteReveal() {
       <h2 ref={quoteRef} className={styles.quote}>
         Made to be <em>lived&nbsp;with.</em>
       </h2>
+
+      <p ref={mantraRef} className={styles.mantra} aria-hidden="true">
+        <span className={styles.mantraLine}>Customised.</span>
+        <span className={styles.mantraLine}>Practical.</span>
+        <span className={styles.mantraLine}>
+          <em>Yours.</em>
+        </span>
+      </p>
 
       {!reducedMotion && (
         <div ref={hintRef} className={styles.scrollHint} aria-hidden="true">
