@@ -100,7 +100,7 @@ export default function AtelierChat() {
       <div className="gsap-reveal sheet-edge mt-14 rounded-xl border border-umber/40 bg-paper p-1.5">
         <div className="grid overflow-hidden rounded-[3px] border border-umber/15 bg-cream md:grid-cols-[0.95fr_1.45fr]">
           {/* ── The pieces, as conversations ── */}
-          <div className="border-b border-umber/15 md:border-b-0 md:border-r">
+          <div className="min-w-0 border-b border-umber/15 md:border-b-0 md:border-r">
             <p className="px-4 pt-4 font-serif text-xs uppercase tracking-[0.26em] text-umber/70">
               The Pieces
             </p>
@@ -162,7 +162,7 @@ export default function AtelierChat() {
           </div>
 
           {/* ── The conversation ── */}
-          <div className="flex min-h-[430px] flex-col">
+          <div className="flex min-h-[430px] min-w-0 flex-col">
             {/* Header */}
             <div className="flex items-center gap-3 border-b border-umber/15 px-4 py-3 sm:px-5">
               <span className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-umber/20 bg-paper font-script text-2xl leading-none text-royal">

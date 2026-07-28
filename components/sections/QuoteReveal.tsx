@@ -58,6 +58,10 @@ export default function QuoteReveal() {
     if (!section || reducedMotion || !tier) return;
 
     const isTouch = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+    // The box geometry must agree with the CSS quote position, which
+    // switches on width — not pointer — so narrow windows of any kind
+    // (phones, split-screen desktops, iPads) get the compact composition.
+    const isCompact = window.matchMedia("(max-width: 767px)").matches;
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
@@ -75,7 +79,7 @@ export default function QuoteReveal() {
       // the tiny square blooms to full bleed
       tl.fromTo(
         frameRef.current,
-        { clipPath: isTouch ? CLIP_START_TOUCH : CLIP_START_DESKTOP },
+        { clipPath: isCompact ? CLIP_START_TOUCH : CLIP_START_DESKTOP },
         { clipPath: CLIP_END, duration: 0.82, ease: "power2.inOut" },
         0.05,
       );

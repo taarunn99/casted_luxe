@@ -22,8 +22,14 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  clip-path: inset(39% 15% 39% 69% round 0.9rem);
+  clip-path: inset(41% 6% 41% 60% round 0.75rem);
   will-change: clip-path;
+}
+
+@media (min-width: 768px) {
+  .frame {
+    clip-path: inset(39% 15% 39% 69% round 0.9rem);
+  }
 }
 
 /* counter-zoom: the film starts pushed-in and settles to 1 as the mask
