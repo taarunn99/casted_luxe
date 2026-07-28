@@ -123,3 +123,40 @@ body {
   outline-offset: 3px;
   border-radius: 2px;
 }
+
+/* Process timeline — nodes blink awake as the drawn ink line reaches them */
+.process-node {
+  position: relative;
+  background: rgba(59, 28, 10, 0.25);
+  transition: background-color 0.3s ease;
+}
+.process-node.node-lit {
+  background: var(--royal);
+  animation: node-blink 0.7s ease-out 1;
+}
+.process-node.node-lit::after {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: 9999px;
+  border: 1px solid var(--royal);
+  opacity: 0;
+  animation: node-ripple 0.8s ease-out 1;
+}
+@keyframes node-blink {
+  0% { opacity: 1; transform: scale(1); }
+  20% { opacity: 0.35; transform: scale(1.8); }
+  45% { opacity: 1; transform: scale(1.15); }
+  65% { opacity: 0.5; transform: scale(1.4); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes node-ripple {
+  0% { opacity: 0.7; transform: scale(0.4); }
+  100% { opacity: 0; transform: scale(1.7); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .process-node.node-lit,
+  .process-node.node-lit::after {
+    animation: none;
+  }
+}

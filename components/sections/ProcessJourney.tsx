@@ -1,16 +1,18 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Link from "next/link";
-import { useReveal } from "@/lib/useReveal";
+import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { WHATSAPP_NUMBER } from "@/lib/works";
 
 /**
  * The Process — five movements from a message to a signed piece.
- * An editorial timeline: a pencil thread runs down the page, each
- * movement alternating sides around it, led by an oversized script
- * numeral (echoing the gallery's I–VIII motif). Closes with the
- * commission CTA and a quiet, native-details FAQ (no JS, crawlable).
+ * All copy is static in the HTML (fully crawlable, visible from first
+ * paint — nothing fades in). The only motion: an ink line draws itself
+ * down the timeline thread as you scroll, and each node blinks awake
+ * the moment the line reaches it. Reduced motion → line pre-drawn,
+ * nodes lit, no animation.
  */
 
 const MOVEMENTS = [
@@ -75,11 +77,56 @@ function WhatsAppIcon() {
 }
 
 export default function ProcessJourney() {
-  const scope = useReveal<HTMLElement>({ stagger: 0.08 });
+  const timelineRef = useRef<HTMLDivElement | null>(null);
+  const inkRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const wrap = timelineRef.current;
+    const ink = inkRef.current;
+    if (!wrap || !ink) return;
+
+    const nodes = Array.from(
+      wrap.querySelectorAll<HTMLElement>("[data-node]"),
+    );
+
+    if (prefersReducedMotion()) {
+      // Static: line fully drawn, every node lit, no animation.
+      ink.style.transform = "scaleY(1)";
+      nodes.forEach((n) => n.classList.add("node-lit"));
+      return;
+    }
+
+    let nodeY: number[] = [];
+
+    const ctx = gsap.context(() => {
+      gsap.set(ink, { scaleY: 0, transformOrigin: "top center" });
+
+      ScrollTrigger.create({
+        trigger: wrap,
+        start: "top 62%",
+        end: "bottom 62%",
+        scrub: 0.35,
+        onRefresh: () => {
+          const top = ink.getBoundingClientRect().top;
+          nodeY = nodes.map(
+            (n) => n.getBoundingClientRect().top + 4 - top,
+          );
+        },
+        onUpdate: (self) => {
+          gsap.set(ink, { scaleY: self.progress });
+          const tip = self.progress * ink.offsetHeight;
+          nodes.forEach((n, i) => {
+            n.classList.toggle("node-lit", tip >= (nodeY[i] ?? Infinity));
+          });
+        },
+      });
+    }, wrap);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section
-      ref={scope}
       id="process"
       aria-label="The commission process"
       className="relative mx-auto max-w-5xl px-6 py-28 sm:py-36"
@@ -89,32 +136,46 @@ export default function ProcessJourney() {
         title="From a conversation, to a signature."
       />
 
-      <p className="gsap-reveal mx-auto mt-8 max-w-2xl text-center font-serif text-xl italic text-umber">
+      <p className="mx-auto mt-8 max-w-2xl text-center font-serif text-xl italic text-umber">
         Every commission follows the same unhurried path. Here is how a piece
         of yours comes to be.
       </p>
 
-      {/* ── The five movements, threaded on a line ── */}
-      <div className="relative mt-20">
-        {/* the thread */}
+      {/* ── The five movements, threaded on a line the scroll draws ── */}
+      <div ref={timelineRef} className="relative mt-20">
+        {/* the faint track */}
         <div
           aria-hidden="true"
-          className="absolute bottom-4 left-4 top-4 w-px bg-umber/20 md:left-1/2"
+          className="absolute bottom-4 left-4 top-4 w-px bg-umber/15 md:left-1/2"
+        />
+        {/* the ink that draws itself down the track as you scroll */}
+        <div
+          ref={inkRef}
+          aria-hidden="true"
+          className="absolute bottom-4 left-4 top-4 w-px origin-top scale-y-0 bg-royal/70 md:left-1/2"
         />
 
         <ol className="space-y-16 md:space-y-20">
           {MOVEMENTS.map((m, i) => {
             const left = i % 2 === 0;
             return (
-              <li key={m.numeral} className="relative md:grid md:grid-cols-2 md:gap-16">
-                {/* node on the thread */}
+              <li
+                key={m.numeral}
+                className="relative md:grid md:grid-cols-2 md:gap-16"
+              >
+                {/* node on the thread — blinks when the ink reaches it */}
                 <span
                   aria-hidden="true"
-                  className="absolute left-4 top-3 h-2 w-2 -translate-x-1/2 rounded-full bg-royal md:left-1/2"
-                />
+                  className="absolute left-4 top-3 -translate-x-1/2 md:left-1/2"
+                >
+                  <span
+                    data-node
+                    className="process-node block h-2 w-2 rounded-full"
+                  />
+                </span>
 
                 <div
-                  className={`gsap-reveal pl-12 md:pl-0 ${
+                  className={`pl-12 md:pl-0 ${
                     left
                       ? "md:col-start-1 md:pr-14 md:text-right"
                       : "md:col-start-2 md:pl-14"
@@ -140,7 +201,7 @@ export default function ProcessJourney() {
       </div>
 
       {/* ── Begin the conversation ── */}
-      <div className="gsap-reveal sheet-edge mx-auto mt-24 max-w-2xl rounded-xl border border-umber/40 bg-cream px-8 py-10 text-center">
+      <div className="sheet-edge mx-auto mt-24 max-w-2xl rounded-xl border border-umber/40 bg-cream px-8 py-10 text-center">
         <p className="font-script text-4xl text-ink sm:text-5xl">
           Begin the conversation
         </p>
@@ -168,10 +229,10 @@ export default function ProcessJourney() {
 
       {/* ── Questions, quietly answered ── */}
       <div className="mx-auto mt-24 max-w-2xl">
-        <p className="gsap-reveal text-center font-serif text-lg italic uppercase tracking-[0.28em] text-umber/80">
+        <p className="text-center font-serif text-lg italic uppercase tracking-[0.28em] text-umber/80">
           Questions
         </p>
-        <div className="gsap-reveal mt-8 divide-y divide-umber/15 border-y border-umber/15">
+        <div className="mt-8 divide-y divide-umber/15 border-y border-umber/15">
           {FAQS.map((f) => (
             <details key={f.q} className="group py-5">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-serif text-xl font-medium text-ink transition-colors hover:text-royal [&::-webkit-details-marker]:hidden">
