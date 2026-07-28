@@ -1,6 +1,7 @@
 import LuxeHero from "@/components/sections/LuxeHero";
 import CollectionPreview from "@/components/sections/CollectionPreview";
 import ArtistTeaser from "@/components/sections/ArtistTeaser";
+import QuoteReveal from "@/components/sections/QuoteReveal";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <LuxeHero />
       <CollectionPreview />
       <ArtistTeaser />
+      <QuoteReveal />
     </main>
   );
 }

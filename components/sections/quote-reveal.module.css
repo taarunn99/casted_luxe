@@ -1,0 +1,138 @@
+/* QuoteReveal — Casted Luxe
+   The brand-reel finale. A huge cream quote sits on a deep near-black
+   field over a tiny video square; scrolling expands the square's mask to
+   full bleed while the quote dissolves and a dark veil lifts, so the reel
+   blooms to life. Same clip-path mask technique as GalleryHero (pure GPU
+   mask — no layout, crisp corners). */
+
+.hero {
+  position: relative;
+  height: 100svh;
+  min-height: 640px;
+  overflow: hidden;
+  /* deep warm near-black — the "dark aesthetic" the reel plays in */
+  background: #130d08;
+}
+
+/* ---------- expanding mask ----------
+   The frame is full-bleed from the start; clip-path carves the small
+   centred square out of it. The value here is the static reduced-motion /
+   no-JS state; GSAP overrides it inline when the scrub runs. */
+.frame {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  clip-path: inset(38% 42% round 0.9rem);
+  will-change: clip-path;
+}
+
+/* counter-zoom: the film starts pushed-in and settles to 1 as the mask
+   opens, so the reveal reads as a camera pull-back */
+.mediaInner {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Dark veil over the film that GSAP lifts as the mask expands. Starts
+   heavy so the tiny box reads as a moody, low-key jewel. */
+.wash {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(8, 6, 4, 0.55) 0%,
+    rgba(8, 6, 4, 0.72) 100%
+  );
+  opacity: 0.82;
+  will-change: opacity;
+}
+
+/* ---------- the quote over the mask ---------- */
+.quote {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  width: min(92vw, 18ch);
+  text-align: center;
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+  font-weight: 600;
+  font-size: clamp(2.9rem, 9.2vw, 7.75rem);
+  line-height: 1.02;
+  letter-spacing: 0.005em;
+  color: var(--cream, #f1efe3);
+  text-shadow: 0 2px 34px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  will-change: opacity, transform;
+}
+
+.quote em {
+  font-style: italic;
+  font-weight: 500;
+}
+
+/* ---------- scroll cue (same voice as the heroes) ---------- */
+.scrollHint {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.scrollHintInner {
+  text-align: center;
+  color: var(--cream);
+  opacity: 0.6;
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+  font-style: italic;
+  font-size: 0.66rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  animation: hintIn 0.9s ease 1.2s both;
+}
+
+@keyframes hintIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 0.6;
+    transform: none;
+  }
+}
+
+.scrollHintInner i {
+  display: block;
+  width: 1px;
+  height: 26px;
+  margin: 8px auto 0;
+  background: var(--cream);
+  animation: hintPulse 2.4s var(--ease-luxe) infinite;
+}
+
+@keyframes hintPulse {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+    transform-origin: top;
+  }
+  50% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+}

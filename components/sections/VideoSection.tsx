@@ -1,18 +1,30 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { useReveal } from "@/lib/useReveal";
 
 /**
- * Cinematic video block — placeholder until the photoshoot film arrives.
- * To go live: replace the inner placeholder with
- *   <video src="/film/atelier.mp4" poster="/film/poster.jpg" controls playsInline />
+ * The brand reel on the About page — the seven-piece cinematic montage
+ * playing as an ambient, muted, looping showcase with a corner unmute
+ * control (the reel ships silent; the toggle is ready for an audio track).
+ *
+ * Placeholder sources (gallery ink film) are swapped to /reel/* once the
+ * reel is generated. Keeps the existing scale-on-scroll entrance.
  */
 export default function VideoSection() {
   const scope = useReveal<HTMLElement>();
   const frameRef = useRef<HTMLDivElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [tier, setTier] = useState<"desktop" | "mobile" | null>(null);
+  const [muted, setMuted] = useState(true);
+
+  useEffect(() => {
+    const touch = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+    const portrait = window.matchMedia("(orientation: portrait)").matches;
+    setTier(touch && portrait ? "mobile" : "desktop");
+  }, []);
 
   useEffect(() => {
     const frame = frameRef.current;
@@ -39,6 +51,14 @@ export default function VideoSection() {
     return () => ctx.revert();
   }, []);
 
+  const toggleMute = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = !v.muted;
+    if (!v.muted) v.play().catch(() => {});
+    setMuted(v.muted);
+  };
+
   return (
     <section
       ref={scope}
@@ -46,40 +66,62 @@ export default function VideoSection() {
       aria-label="Inside the atelier — film"
       className="relative mx-auto max-w-6xl px-6 py-28 sm:py-36"
     >
-      <SectionHeading eyebrow="Inside the Atelier" title="The Craft, on Film" />
+      <SectionHeading eyebrow="Inside the Atelier" title="The Collection, in Motion" />
 
       <p className="gsap-reveal mx-auto mt-8 max-w-2xl text-center font-serif text-xl italic text-umber">
-        A cinematic look at how each commission takes shape — filming with the
-        upcoming photoshoot.
+        Seven pieces, brought to life — a slow cinematic pass through the
+        collection.
       </p>
 
       <div
         ref={frameRef}
-        className="gsap-reveal sheet-edge mt-14 rounded-sm border-[6px] border-umber bg-paper p-3 sm:p-4 will-change-transform"
+        className="gsap-reveal sheet-edge mt-14 overflow-hidden rounded-xl border border-umber/40 bg-paper p-1.5 will-change-transform"
       >
-        <div className="relative aspect-video overflow-hidden border border-umber/25 bg-lilac/60">
-          {/* Placeholder canvas */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-5">
-            <button
-              type="button"
-              aria-label="Film coming soon"
-              className="group flex h-20 w-20 cursor-pointer items-center justify-center rounded-full bg-royal shadow-[0_12px_32px_-8px_rgba(58,15,98,0.5)] transition-colors duration-200 hover:bg-umber"
+        <div className="relative aspect-video overflow-hidden rounded-[3px] border border-umber/15 bg-ink">
+          {tier && (
+            <video
+              ref={videoRef}
+              className="absolute inset-0 h-full w-full object-cover"
+              poster="/reel/reel-poster.webp"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
             >
-              <svg
-                width="26"
-                height="26"
-                viewBox="0 0 24 24"
-                fill="#ece4fa"
-                className="ml-1"
-                aria-hidden="true"
-              >
-                <path d="M6 4.5v15l13-7.5-13-7.5z" />
+              {tier === "mobile" ? (
+                <>
+                  <source
+                    src="/reel/reel-720p-hevc.mp4"
+                    type='video/mp4; codecs="hvc1"'
+                  />
+                  <source src="/reel/reel-720p.mp4" type="video/mp4" />
+                </>
+              ) : (
+                <source src="/reel/reel.mp4" type="video/mp4" />
+              )}
+            </video>
+          )}
+
+          {/* Unmute / mute toggle */}
+          <button
+            type="button"
+            onClick={toggleMute}
+            aria-label={muted ? "Unmute reel" : "Mute reel"}
+            className="absolute bottom-3 right-3 z-10 inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-ink/70 text-cream ring-1 ring-cream/25 backdrop-blur-sm transition-colors duration-200 hover:bg-ink/85"
+          >
+            {muted ? (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M11 5 6 9H3v6h3l5 4V5z" />
+                <path d="M22 9l-6 6M16 9l6 6" />
               </svg>
-            </button>
-            <p className="font-script text-3xl sm:text-4xl text-ink/80">
-              Premiering with the collection
-            </p>
-          </div>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M11 5 6 9H3v6h3l5 4V5z" />
+                <path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a9 9 0 0 1 0 14" />
+              </svg>
+            )}
+          </button>
         </div>
       </div>
     </section>
