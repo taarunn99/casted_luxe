@@ -159,6 +159,22 @@ const WORKS: Work[] = [
     image: "/gallery/qamar.webp",
     alt: "Qamar — a backlit hand-carved lunar relief glowing in a round frame on desert sand beneath a starry night sky",
   },
+  {
+    title: "Sunfall",
+    numeral: "VIII",
+    style: "Luminous Landscape",
+    medium: "Oil on canvas",
+    materials:
+      "Stretched canvas · Oil paints · Layered luminous glazes",
+    size: "Stretched canvas · Made to measure",
+    story:
+      "A grove that keeps its own sun — golden light held on canvas, glowing for the room where your day winds down.",
+    craft:
+      "Bare trees drawn dark over a luminous yellow ground, the sun's rays pulled through in long diagonal strokes and built up in layered glazes until the canvas holds its own light.",
+    theme: "#2b350c", // deep olive — the painting's dark undergrowth, counterpoint to the golden light
+    image: "/gallery/sunfall.webp",
+    alt: "Sunfall — a golden sunlit forest painting on canvas, standing amid a real cool misty pine forest with ferns and moss",
+  },
 ];
 
 const whatsappUrl = (work: Work) =>
@@ -243,7 +259,7 @@ function ArtworkTile({ work }: { work: Work }) {
             {isLandscape && (
               <div className="pointer-events-none absolute right-0 top-0 max-w-[78%] rounded-bl-3xl bg-gradient-to-bl from-ink/80 via-ink/45 to-transparent pb-10 pl-14 pr-4 pt-3 text-right sm:pr-6 sm:pt-4">
                 <p className="font-serif text-[0.6rem] uppercase tracking-[0.3em] text-cream/85 sm:text-xs">
-                  {work.numeral} — of seven
+                  {work.numeral} — of eight
                 </p>
                 <p className="mt-0.5 font-script text-3xl leading-tight text-cream sm:text-4xl">
                   {work.title}
@@ -317,7 +333,7 @@ function NameTile({ work, className = "" }: { work: Work; className?: string }) 
       style={{ backgroundColor: work.theme }}
     >
       <p className="font-serif text-xs uppercase tracking-[0.3em] text-cream/70">
-        {work.numeral} — of seven
+        {work.numeral} — of eight
       </p>
       <h3 className="mt-2 font-script text-4xl text-cream sm:text-5xl">
         {work.title}
@@ -571,7 +587,7 @@ export default function Gallery() {
         <SectionHeading eyebrow="Featured Works" title="The Collection" />
 
         <p className="gsap-reveal mx-auto mt-8 max-w-2xl text-center font-serif text-xl italic text-umber">
-          Seven original commissions, each one made to be lived with —
+          Eight original commissions, each one made to be lived with —
           scroll to wander the collection.
         </p>
       </div>

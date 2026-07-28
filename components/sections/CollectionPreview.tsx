@@ -78,7 +78,7 @@ export default function CollectionPreview() {
         <SectionHeading eyebrow="Featured Works" title="The Collection" />
 
         <p className="gsap-reveal mx-auto mt-8 max-w-2xl text-center font-serif text-xl italic text-umber">
-          A first glimpse of the collection — seven original commissions, each
+          A first glimpse of the collection — eight original commissions, each
           made to be lived with.
         </p>
 
