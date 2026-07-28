@@ -2,6 +2,7 @@ import LuxeHero from "@/components/sections/LuxeHero";
 import CollectionPreview from "@/components/sections/CollectionPreview";
 import ArtistTeaser from "@/components/sections/ArtistTeaser";
 import QuoteReveal from "@/components/sections/QuoteReveal";
+import AtelierChat from "@/components/sections/AtelierChat";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <CollectionPreview />
       <ArtistTeaser />
       <QuoteReveal />
+      <AtelierChat />
     </main>
   );
 }
