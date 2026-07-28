@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { useReveal } from "@/lib/useReveal";
+import { useInViewVideo } from "@/lib/useInViewVideo";
 
 /**
  * The brand reel on the About page — the seven-piece cinematic montage
@@ -19,6 +20,9 @@ export default function VideoSection() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [tier, setTier] = useState<"desktop" | "mobile" | null>(null);
   const [muted, setMuted] = useState(true);
+
+  // The reel fetches + plays only when the frame nears the viewport
+  useInViewVideo(videoRef);
 
   useEffect(() => {
     const touch = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
@@ -83,11 +87,10 @@ export default function VideoSection() {
               ref={videoRef}
               className="absolute inset-0 h-full w-full object-cover"
               poster="/reel/reel-poster.webp"
-              autoPlay
               muted
               loop
               playsInline
-              preload="metadata"
+              preload="none"
             >
               {tier === "mobile" ? (
                 <>

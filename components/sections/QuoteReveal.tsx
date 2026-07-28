@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
+import { useInViewVideo } from "@/lib/useInViewVideo";
 import styles from "./quote-reveal.module.css";
 
 /**
@@ -37,6 +38,9 @@ export default function QuoteReveal() {
   const hintRef = useRef<HTMLDivElement | null>(null);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [tier, setTier] = useState<"desktop" | "mobile" | null>(null);
+
+  // The reel fetches + plays only when the section nears the viewport
+  useInViewVideo(videoRef, !reducedMotion);
 
   useEffect(() => {
     setReducedMotion(prefersReducedMotion());
@@ -116,11 +120,10 @@ export default function QuoteReveal() {
               ref={videoRef}
               className={styles.video}
               poster="/reel/reel-poster.webp"
-              autoPlay={!reducedMotion}
               muted
               loop
               playsInline
-              preload="metadata"
+              preload="none"
               aria-hidden="true"
               tabIndex={-1}
             >
