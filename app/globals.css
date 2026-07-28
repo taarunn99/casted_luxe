@@ -160,3 +160,14 @@ body {
     animation: none;
   }
 }
+
+/* Gallery header — ink on cream at rest; flips to cream the moment a
+   piece's dark tone owns the section background (data-dark set in JS) */
+.gallery-head,
+.gallery-head * {
+  transition: color 0.5s ease;
+}
+#gallery[data-dark="true"] .gallery-head,
+#gallery[data-dark="true"] .gallery-head * {
+  color: var(--cream) !important;
+}

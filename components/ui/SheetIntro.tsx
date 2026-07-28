@@ -28,6 +28,10 @@ export default function SheetIntro() {
     document.documentElement.classList.add("intro-lock");
     const unlock = () => document.documentElement.classList.remove("intro-lock");
 
+    // Failsafe: no matter what happens to the timeline, the page can
+    // never stay locked — the lock dissolves after 7s regardless.
+    const failsafe = window.setTimeout(unlock, 7000);
+
     if (prefersReducedMotion()) {
       const tween = gsap.to(root, {
         opacity: 0,
@@ -40,6 +44,7 @@ export default function SheetIntro() {
         },
       });
       return () => {
+        window.clearTimeout(failsafe);
         tween.kill();
         unlock();
       };
@@ -95,6 +100,7 @@ export default function SheetIntro() {
     );
 
     return () => {
+      window.clearTimeout(failsafe);
       tl.kill();
       unlock();
     };
@@ -106,6 +112,7 @@ export default function SheetIntro() {
     <div
       ref={rootRef}
       aria-hidden="true"
+      data-sheet-intro
       className="fixed inset-x-0 top-0 z-[80] h-[103svh] bg-paper will-change-transform shadow-[0_36px_80px_-12px_rgba(44,20,5,0.4)]"
     >
       {/* soft sheet lighting — lighter heart, gently darker edges */}

@@ -409,8 +409,22 @@ export default function Gallery() {
           }
         });
 
-        if (bestTheme && bestTheme !== currentTheme) {
+        if (!bestTheme && currentTheme) {
+          // No piece in view (back at the header) — return to cream so the
+          // ink heading is readable again.
+          currentTheme = "";
+          delete section.dataset.dark;
+          gsap.to(section, {
+            backgroundColor: "#f1efe3",
+            duration: 0.7,
+            ease: "power2.out",
+            overwrite: "auto",
+          });
+        } else if (bestTheme && bestTheme !== currentTheme) {
           currentTheme = bestTheme;
+          // Dark piece tone owns the background — the header flips to cream
+          // (see .gallery-head rules in globals.css).
+          section.dataset.dark = "true";
           gsap.to(section, {
             backgroundColor: bestTheme,
             duration: 0.7,
@@ -439,7 +453,7 @@ export default function Gallery() {
       aria-label="Featured works"
       className="relative bg-cream pt-28 pb-16 sm:pt-36 sm:pb-24"
     >
-      <div className="mx-auto max-w-7xl px-6 pb-6 sm:pb-10">
+      <div className="gallery-head mx-auto max-w-7xl px-6 pb-6 sm:pb-10">
         <SectionHeading eyebrow="Featured Works" title="The Collection" />
 
         <p className="gsap-reveal mx-auto mt-8 max-w-2xl text-center font-serif text-xl italic text-umber">

@@ -51,21 +51,27 @@ echo "→ assemble master reel"
 ffmpeg -y "${inputs[@]}" -filter_complex "${filter%;}" -map "$last" \
   -c:v libx264 -crf 18 -preset slow -pix_fmt yuv420p "$TMP/master.mp4"
 
-# 3) Web tiers (all silent — brand reel ships muted)
+# 3) Web tiers (all silent — brand reel ships muted).
+#    Compatibility is pinned deliberately: H.264 level capped (4.0 / 3.1)
+#    and bt709 colour tagged — newer ffmpeg defaults (e.g. level 5.0,
+#    untagged colour) can choke stricter mobile/browser decoders.
 echo "→ reel.mp4 (1080p)"
 ffmpeg -y -i "$TMP/master.mp4" -an \
-  -c:v libx264 -profile:v high -pix_fmt yuv420p -crf 23 -preset slow \
-  -movflags +faststart "$OUT/reel.mp4"
+  -c:v libx264 -profile:v high -level:v 4.0 -pix_fmt yuv420p \
+  -colorspace bt709 -color_primaries bt709 -color_trc bt709 \
+  -crf 23 -preset slow -movflags +faststart "$OUT/reel.mp4"
 
 echo "→ reel-720p.mp4 (H.264 mobile)"
 ffmpeg -y -i "$TMP/master.mp4" -an -vf "scale=1280:720" \
-  -c:v libx264 -profile:v high -pix_fmt yuv420p -crf 24 -preset slow \
-  -movflags +faststart "$OUT/reel-720p.mp4"
+  -c:v libx264 -profile:v high -level:v 3.1 -pix_fmt yuv420p \
+  -colorspace bt709 -color_primaries bt709 -color_trc bt709 \
+  -crf 24 -preset slow -movflags +faststart "$OUT/reel-720p.mp4"
 
 echo "→ reel-720p-hevc.mp4 (HEVC mobile)"
 ffmpeg -y -i "$TMP/master.mp4" -an -vf "scale=1280:720" \
-  -c:v libx265 -tag:v hvc1 -pix_fmt yuv420p -crf 26 -preset slow \
-  -movflags +faststart "$OUT/reel-720p-hevc.mp4"
+  -c:v libx265 -tag:v hvc1 -pix_fmt yuv420p \
+  -colorspace bt709 -color_primaries bt709 -color_trc bt709 \
+  -crf 26 -preset slow -movflags +faststart "$OUT/reel-720p-hevc.mp4"
 
 echo "→ reel-poster.webp (first frame)"
 ffmpeg -y -i "$TMP/master.mp4" -vframes 1 -vf "scale=1600:-2:flags=lanczos" \

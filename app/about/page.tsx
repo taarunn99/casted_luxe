@@ -4,9 +4,10 @@ import ProcessTeaser from "@/components/sections/ProcessTeaser";
 import VideoSection from "@/components/sections/VideoSection";
 
 export const metadata: Metadata = {
-  title: "About Ashrat",
+  title:
+    "Ashrat — Dubai Artist Behind Casted Luxe | Resin Art, Calligraphy & Bespoke Commissions",
   description:
-    "Meet Ashrat, the artist behind Casted Luxe — every bespoke commission drawn, layered and finished by hand as a singular original.",
+    "Meet Ashrat, the Dubai-based artist behind Casted Luxe. Every bespoke commission — epoxy resin showpiece, gold-leaf Arabic calligraphy or luminous canvas — is drawn, layered and finished by hand as a singular original. No prints, no reproductions. Watch the collection come to life on film.",
   alternates: { canonical: "/about" },
 };
 

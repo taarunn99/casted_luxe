@@ -14,22 +14,40 @@ export function useInViewVideo(
   enabled = true,
 ) {
   useEffect(() => {
-    const video = ref.current;
-    if (!video || !enabled) return;
+    if (!enabled) return;
 
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          video.play().catch(() => {});
-        } else {
-          video.pause();
-        }
-      },
-      // start fetching a moment before the section scrolls into view
-      { rootMargin: "300px 0px" },
-    );
+    // The <video> often mounts a tick later than this effect (it renders
+    // only once the device tier resolves), so poll briefly until the
+    // element exists before observing — otherwise the observer would
+    // never attach and the film would sit on its poster forever.
+    let io: IntersectionObserver | null = null;
+    let tries = 0;
+    let timer: number | undefined;
 
-    io.observe(video);
-    return () => io.disconnect();
+    const attach = () => {
+      const video = ref.current;
+      if (!video) {
+        if (tries++ < 40) timer = window.setTimeout(attach, 50);
+        return;
+      }
+      io = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            if (video.paused) video.play().catch(() => {});
+          } else {
+            video.pause();
+          }
+        },
+        // start fetching a moment before the section scrolls into view
+        { rootMargin: "300px 0px" },
+      );
+      io.observe(video);
+    };
+    attach();
+
+    return () => {
+      if (timer !== undefined) window.clearTimeout(timer);
+      io?.disconnect();
+    };
   }, [ref, enabled]);
 }

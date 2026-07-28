@@ -31,13 +31,21 @@ export default function Lightbox({
   const closeRef = useRef<HTMLButtonElement | null>(null);
   const reduce = useReducedMotion();
 
+  // Keep the latest onClose without destabilising the lock effect below —
+  // its deps must be [open] only, so the scroll lock is taken exactly once
+  // per open and released exactly once per close.
+  const onCloseRef = useRef(onClose);
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  });
+
   // Escape to close + focus the cross while open; lock the page behind it.
   useEffect(() => {
     if (!open) return;
 
     lockScroll();
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") onCloseRef.current();
     };
     window.addEventListener("keydown", onKey);
     const focusTimer = window.setTimeout(() => closeRef.current?.focus(), 40);
@@ -47,7 +55,7 @@ export default function Lightbox({
       window.clearTimeout(focusTimer);
       unlockScroll();
     };
-  }, [open, onClose]);
+  }, [open]);
 
   if (typeof document === "undefined") return null;
 
