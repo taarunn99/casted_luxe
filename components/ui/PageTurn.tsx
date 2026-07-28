@@ -21,6 +21,7 @@ const LINES: Record<string, string> = {
   "/": "Returning home",
   "/about": "Meeting the artist",
   "/gallery": "Unveiling the collection",
+  "/process": "Tracing the making",
   "/contact": "Opening the conversation",
   "/terms": "Reading the fine print",
   "/privacy": "Guarding your trust",

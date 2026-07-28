@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import About from "@/components/sections/About";
+import ProcessTeaser from "@/components/sections/ProcessTeaser";
 import VideoSection from "@/components/sections/VideoSection";
 
 export const metadata: Metadata = {
@@ -13,6 +14,7 @@ export default function AboutPage() {
   return (
     <main className="pt-10 sm:pt-12">
       <About />
+      <ProcessTeaser />
       <VideoSection />
     </main>
   );
