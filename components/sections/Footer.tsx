@@ -41,6 +41,23 @@ export default function Footer() {
           © {new Date().getFullYear()} Casted Luxe · All pieces are original
           works by Ashrat
         </p>
+        <p className="-mt-2 font-serif text-sm text-umber/70">
+          <Link
+            href="/terms"
+            className="transition-colors duration-200 hover:text-royal"
+          >
+            Terms &amp; Conditions
+          </Link>
+          <span className="mx-2" aria-hidden="true">
+            ·
+          </span>
+          <Link
+            href="/privacy"
+            className="transition-colors duration-200 hover:text-royal"
+          >
+            Privacy Policy
+          </Link>
+        </p>
       </div>
     </footer>
   );
