@@ -4,9 +4,10 @@ import { useState } from "react";
 import { useReveal } from "@/lib/useReveal";
 import SectionHeading from "@/components/ui/SectionHeading";
 
-const ENQUIRY_EMAIL = "tarun.s@lapizblue.com";
+import { ENQUIRY_EMAIL, WHATSAPP_NUMBER } from "@/lib/works";
+
 const WHATSAPP_URL =
-  "https://wa.me/971558005474?text=" +
+  `https://wa.me/${WHATSAPP_NUMBER}?text=` +
   encodeURIComponent(
     "Hello Casted Luxe — I'd love to commission a customised art piece.",
   );

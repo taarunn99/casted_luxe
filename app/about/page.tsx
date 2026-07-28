@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import About from "@/components/sections/About";
 import ProcessTeaser from "@/components/sections/ProcessTeaser";
 import VideoSection from "@/components/sections/VideoSection";
+import Signatures from "@/components/sections/Signatures";
 
 export const metadata: Metadata = {
   title:
@@ -17,6 +18,7 @@ export default function AboutPage() {
       <About />
       <ProcessTeaser />
       <VideoSection />
+      <Signatures />
     </main>
   );
 }

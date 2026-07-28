@@ -4,6 +4,7 @@ import ArtistTeaser from "@/components/sections/ArtistTeaser";
 import QuoteReveal from "@/components/sections/QuoteReveal";
 import AtelierChat from "@/components/sections/AtelierChat";
 import ProcessTeaser from "@/components/sections/ProcessTeaser";
+import AtelierPromise from "@/components/sections/AtelierPromise";
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
       <ArtistTeaser />
       <QuoteReveal />
       <AtelierChat />
+      <AtelierPromise />
     </main>
   );
 }
