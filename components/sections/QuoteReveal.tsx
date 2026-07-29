@@ -172,7 +172,7 @@ export default function QuoteReveal() {
       <p ref={mantraRef} className={styles.mantra} aria-hidden="true">
         <span className={styles.mantraLine}>Timeless.</span>
         <span className={styles.mantraLine}>Handcrafted.</span>
-        <span className={styles.mantraLine}>
+        <span className={`${styles.mantraLine} ${styles.mantraForever}`}>
           <em>Forever.</em>
         </span>
       </p>

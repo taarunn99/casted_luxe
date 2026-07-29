@@ -125,6 +125,16 @@
   will-change: opacity, transform;
 }
 
+/* the closing word carries the brand purple — lifted off the dark
+   footage by a soft lilac halo so the royal stays legible */
+.mantraForever {
+  color: var(--royal, #3a0f62);
+  text-shadow:
+    0 0 26px rgba(236, 228, 250, 0.6),
+    0 0 2px rgba(236, 228, 250, 0.5),
+    0 2px 30px rgba(0, 0, 0, 0.55);
+}
+
 /* ---------- scroll cue (same voice as the heroes) ---------- */
 .scrollHint {
   position: absolute;
